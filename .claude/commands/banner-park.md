@@ -1,0 +1,832 @@
+# Banner Park ver.7.0
+
+strategy.json + Concept Park 完了前提。3つの魂 — **キービジュアルそのもの × キラーキャッチコピー × 別の仮説**。DPro KV哲学フィルター × ベクトル品質ゲート × Nano Banana Pro × PDFマーケティングインテリジェンスレポート。
+
+`/banner-park` で起動。
+
+---
+
+## 起動時表示
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BANNER PARK ver.7.0
+  戦略翻訳型 × 仮説駆動 × ベクトル品質保証 × PDFレポート
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  前提: /research-park + /concept-park 完了済み
+  3つの魂:
+    1. キービジュアルそのもの
+    2. キラーキャッチコピー
+    3. 別の仮説
+  Nano Banana Pro × DPro KV哲学フィルター × PDFレポート
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+ランダム1行:
+- 「戦略を弾丸に変換する。装填開始。」
+- 「1枚1枚がキービジュアル。1行1行がキラーコピー。」
+- 「仮説の数だけ、勝ち筋がある。」
+- 「N1の脳内に1番乗りするバナー、作るぞ。」
+
+---
+
+## 3つの魂（哲学）
+
+Banner Park v7.0 が生み出す全てのバナーは、この3つの魂を宿す。
+
+### 魂1: キービジュアルそのもの
+
+> **1つ1つのバナーが、この商品コンセプトを引き立たせるキービジュアルそのものであろうとする。**
+
+バナーは「広告枠を埋める画像」ではない。その商品の世界観を1枚で体現する作品。
+Concept Park で確定した keyVisual の方向性が、全バナーのビジュアルの核になる。
+DPro リサーチでも「数字 × 美しさ」の2段階で選ぶ。売れてるだけじゃダメ。美しくないと学ばない。
+
+### 魂2: キラーキャッチコピー
+
+> **各バナーの文言は、その商品を代表するキラーキャッチコピーであろうとする。**
+
+ヘッドラインは「説明文」ではない。その1行で商品の全てを語れるレベルの言葉。
+Concept Park で確定した salesCopy + hookVectors が起点。
+「この1行だけ見て、買いたくなるか？」が基準。
+
+### 魂3: 別の仮説
+
+> **5枚、10枚、20枚 — 数ではなく仮説の数。各バナーが異なる検証仮説を持つ。**
+
+同じコピーの色違いを量産しない。各バナーが「このN1に、このフック角度で、この視線誘導で刺したら？」という固有の仮説を持つ。
+配信後に「どの仮説が当たったか」が分かる設計。
+
+---
+
+## Phase 0: 選択肢ヒアリング
+
+### 0-A: strategy.json 読み込み
+
+`research-park/output/{PRODUCT_SLUG}/strategy.json` を Read。
+なければ → 「先に `/research-park` + `/concept-park` を実行してね」と案内して終了。
+
+strategy.json から以下を取得:
+- `productIntel` → 商品情報・USP
+- `primaryN1` → ターゲットN1（層・ペルソナ・新認知戦略）
+- `concept` → コンセプト・Only1ポジション・コンセプトベクトル
+- `keyVisual` → ビジュアル方向性（mood/色/構図/商品見せ方）
+- `salesCopy` → セールスコピーA/B・ベクトル
+- `messageSystem` → メッセージ体系・トーン・NG表現
+- `formatStrategy.banner` → バナー固有の役割・メッセージ・ベクトル基準値
+- `hookVectors` → フック角度バリエーション + ベクトル
+- `layerCommunication` → 3層別コミュニケーション方針
+- `assets` → ブランドアセット（ロゴ・カラー・ビジュアルトーン）
+
+`all_vectors.json` も Read → 品質ゲートで使う。
+
+**keyVisual / salesCopy / formatStrategy / hookVectors が空の場合** → 「先に `/concept-park` を完了してね」と案内。
+
+### 0-B: 選択肢ヒアリング
+
+パクに以下を**選択肢形式**で質問:
+
+```
+━━━ バナー設定 ━━━
+
+1. 広告媒体は？
+   a) Meta（Instagram / Facebook）
+   b) TikTok
+   c) Google（GDN / YouTube）
+   d) LINE
+   e) その他（入力）
+
+2. バナーサイズは？
+   a) 1080×1080（1:1 — SNSフィード）
+   b) 1080×1350（4:5 — Instagram推奨）
+   c) 1200×628（1.91:1 — GDN / Facebook）
+   d) 1080×1920（9:16 — ストーリーズ / TikTok）
+   e) その他（入力）
+
+3. 獲得タイプは？
+   a) EC購入
+   b) リード獲得（LP→フォーム）
+   c) アプリインストール
+   d) その他（入力）
+
+4. 生成枚数は？
+   a) 5枚（最小仮説セット — 高速テスト向き）
+   b) 10枚（標準仮説セット — バランス型）
+   c) 20枚（最大仮説セット — 大規模テスト向き）
+━━━━━━━━━━━━━━━━━━━━
+```
+
+アスペクト比変換:
+
+| サイズ | アスペクト比 |
+|--------|------------|
+| 1080×1080 | 1:1 |
+| 1080×1350 | 4:5 |
+| 1200×628 | 1.91:1 |
+| 1080×1920 | 9:16 |
+| 上記以外 | 最も近いものに丸め |
+
+---
+
+## ナレッジ読み込み
+
+以下を **Read tool で必ず読む**:
+- `.claude/knowledge/banner-dna-templates.md` — 勝ちDNA BN-A〜F
+- `.claude/knowledge/hook-db.md` — フックDB BH1〜BH8
+- `.claude/knowledge/cta-db.md` — CTADB BC1〜BC8
+
+※ マーケティング哲学はResearch Parkで反映済み。コンセプト・KV・セールスコピー・フォーマット戦略はConcept Parkで確定済み。全てstrategy.jsonに入っている。
+
+---
+
+## Phase 1: DPro KV哲学フィルターリサーチ
+
+**メインエージェントが DPro MCP を直接実行。**
+
+### 哲学: 「数字 × 美しさ」の2段階選定
+
+普通のリサーチ = 売れてるバナーを集める。
+KV哲学フィルター = **売れてる × 美しいバナーだけ学ぶ**。
+
+- **Stage 1（数字フィルター）**: DPro MCP で cost_difference 上位を取得
+- **Stage 2（KV哲学フィルター）**: 取得したバナーの ad_all_sentence を読み、「このバナーは商品のキービジュアルとして成立するか？」で選別
+
+### Step 1: ジャンル特定
+
+`search_genres` で関連ジャンル1-3個特定。
+strategy.json の `dproIntel.genreId` があればそれを使用。
+
+### Step 2: DPro データ取得
+
+#### 勝ちバナー候補 20本取得
+`get_items` で以下2回取得:
+
+| 条件 | パラメータ |
+|------|-----------|
+| 月間安定勝ち | interval=30, sort=cost_difference-desc, limit=100 |
+| 直近急上昇 | interval=7, sort=cost_difference-desc, limit=100 |
+
+両方のTOP30に入るバナーを優先。同一advertiser最大2本。
+
+### Step 3: KV哲学フィルター（2段階評価）
+
+取得した20本の ad_all_sentence + production_url を確認し、**2軸で評価**:
+
+```
+各バナーに対して:
+
+■ 数字スコア（DProデータから自動）
+  cost_difference / play_count / digg_rate
+
+■ KV哲学スコア（AIが判定）
+  「このバナーは、その商品のキービジュアルとして美しく成立しているか？」
+  5段階: ★1（広告感丸出し）〜 ★5（ブランドKVレベル）
+
+  判定基準:
+  - ビジュアルの統一感と世界観
+  - 商品の見せ方が魅力的か
+  - タイポグラフィの品質
+  - 色彩設計の美しさ
+  - 「広告」を超えて「作品」に見えるか
+
+合格ライン: 数字TOP20 かつ KV哲学 ★3以上 → 学習対象
+```
+
+### Step 4: 合格バナーの構造分析
+
+KV哲学フィルター通過バナー（5-10本）を分析:
+
+各バナーについて:
+1. **composition**: layout, zones, colorScheme, typography, imageRole, ctaDesign
+2. **eyeFlow**: pattern（Z/F/中央集中/対角線）, step1-3, anchors
+3. **copyStructure**: hook, hookText, benefit, proof, cta
+4. **matchedTemplate**: templateId（BN-A〜F or OTHER）, matchConfidence
+5. **kvQuality**: なぜこのバナーがKVとして美しいのか — 学ぶべきポイント
+
+### DPro件数不足時フォールバック
+
+interval 30→7→2、ジャンルなしで再検索。最低3本確保。
+DPro非掲載の場合 → Phase 1 スキップ、Phase 2 はstrategy.json のみで設計。
+
+---
+
+## Phase 2: N枚のバナー設計（仮説ベース）
+
+### 設計の原則
+
+**N枚 = N個の仮説。** 各バナーが固有の検証仮説を持つ。
+
+仮説の変数:
+- **フック角度**: hookVectors から選択（常識否定/共感/結果提示/権威/好奇心）
+- **視線誘導**: 4パターンから選択（Z型/F型/中央集中型/対角線型）
+- **ヘッドライン**: salesCopy を軸に、フック角度に合わせたバリエーション
+- **ビジュアル表現**: keyVisual を軸に、フック角度に合わせた微調整
+
+### Step 1: hookVector 選択アルゴリズム（ベクトル多様性最大化）
+
+N枚分のフック角度を、ベクトル空間上で最大限バラけるように自動選択:
+
+```python
+from google import genai
+import os, subprocess, json, numpy as np
+
+def _load_env(var):
+    if not os.environ.get(var):
+        try:
+            r = subprocess.run(['zsh','-i','-c',f'echo ${var}'], capture_output=True, text=True, timeout=5)
+            v = r.stdout.strip()
+            if v: os.environ[var] = v
+        except: pass
+_load_env('GEMINI_API_KEY_1')
+
+client = genai.Client(api_key=os.environ['GEMINI_API_KEY_1'])
+
+def embed(text):
+    r = client.models.embed_content(model='gemini-embedding-001', contents=text)
+    return r.embeddings[0].values
+
+def cosine_sim(a, b):
+    a, b = np.array(a), np.array(b)
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+# strategy.json から hookVectors 読み込み
+hook_pool = strategy['hookVectors']  # [{angle, text, vector}, ...]
+n1_demand_vec = np.array([v['vector'] for v in all_vectors if v['category'] == 'layer_demand' and v['layer'] == primary_layer][0])
+
+# N枚分を選択: 互いの sim <= 0.70（多様性）& N1需要 sim >= 0.45（刺さり度）
+selected = []
+pool = sorted(hook_pool, key=lambda h: -cosine_sim(np.array(h['vector']), n1_demand_vec))  # N1刺さり順
+
+for h in pool:
+    h_vec = np.array(h['vector'])
+    # N1需要チェック
+    if cosine_sim(h_vec, n1_demand_vec) < 0.45:
+        continue
+    # 既選択との多様性チェック
+    too_similar = False
+    for s in selected:
+        if cosine_sim(h_vec, np.array(s['vector'])) > 0.70:
+            too_similar = True
+            break
+    if not too_similar:
+        selected.append(h)
+    if len(selected) >= banner_count:
+        break
+
+# hookVectors が N枚分に足りない場合: 既存フックを軸にバリエーション生成
+if len(selected) < banner_count:
+    # salesCopy A/B を追加フックとして活用
+    # strategy.json の layerCommunication からフック候補を追加生成
+    pass
+```
+
+### Step 2: 視線誘導パターンの割り当て
+
+4パターンをN枚に均等分配:
+
+| パターン | 特徴 | 最適な場面 |
+|---------|------|-----------|
+| **Z型** | 左上→右上→左下→右下。自然な読み順 | テキスト多め、情報整理型 |
+| **F型** | 左上→右方向→左下→右方向。Web的 | ヘッドライン重視、縦長 |
+| **中央集中型** | 中央にフォーカス→周辺で補足 | 商品中央、インパクト重視 |
+| **対角線型** | 左上→右下（or 右上→左下）の斜め導線 | ダイナミック、動き重視 |
+
+```
+5枚の場合:  Z×1, F×1, 中央×2, 対角線×1
+10枚の場合: Z×2, F×3, 中央×3, 対角線×2
+20枚の場合: Z×5, F×5, 中央×5, 対角線×5
+```
+
+### Step 3: bannerSpec 生成（N枚分の設計書）
+
+Claude が strategy.json の全データを読み解き、N枚分の bannerSpec（JSON設計書）を生成する。
+
+```json
+{
+  "bannerIndex": 1,
+  "hypothesis": "常識否定型フック × Z型視線 — 準顕在層の既存常識を壊し、新基準を提示",
+  "hookAngle": "常識否定型",
+  "hookSource": "hookVectors[0]",
+  "gazeFlow": "Z型",
+  "gazeDescription": "左上: ヘッドライン → 右上: サブコピー → 左下: 商品画像 → 右下: CTA",
+
+  "headline": "○○は逆効果だった",
+  "subHeadline": "△△△△△△△△△",
+  "ctaText": "詳しく見る",
+  "offerBadge": null,
+
+  "visualDirection": {
+    "mood": "keyVisual.mood を継承",
+    "productPresentation": "keyVisual.productPresentation を継承",
+    "humanElement": "keyVisual.humanElement を継承",
+    "colorDirection": {
+      "primary": "keyVisual.colorDirection.primary",
+      "accent": "keyVisual.colorDirection.accent",
+      "background": "keyVisual.colorDirection.background"
+    },
+    "composition": "Z型に最適化した具体的構図",
+    "typography": "keyVisual.typography を継承",
+    "differentiator": "keyVisual.differentiator — 競合バナーとの視覚的差別化"
+  },
+
+  "kvPhilosophy": "このバナーがKVとして成立する理由 — keyVisualの世界観をどう体現するか",
+  "killerCopyPhilosophy": "このヘッドラインが商品を代表するキラーコピーとして成立する理由",
+  "testHypothesis": "配信後に検証したい仮説 — 例: 常識否定フックは準顕在層のCTR向上に効くか"
+}
+```
+
+### Step 4: コピーライティング詳細ルール
+
+各バナーのヘッドライン生成時に適用:
+
+1. **salesCopy が起点**: strategy.json の salesCopy.primary / primaryB をベースに、hookAngle に合わせて変換
+2. **15文字以内**: バナーヘッドラインは15文字以内（パクの基準）
+3. **数字ファースト**: 数値が入る場合は冒頭に
+4. **フックDB照合**: BH1-BH8 の該当パターンを参考
+5. **CTADB照合**: BC1-BC8 から獲得タイプに合わせて選定
+6. **NG表現チェック**: messageSystem.ngExpressions に該当しないか確認
+7. **新認知戦略の反映**: primaryN1.newCognitionStrategy をコピーに織り込む
+8. **KV哲学連動**: Phase 1 で学んだ勝ちバナーのコピーパターンを参考
+
+### Step 5: fullBannerPrompt 変換（Claude → Gemini）
+
+bannerSpec を自然言語プロンプトに変換。Gemini が最も良く理解する形式。
+
+```
+[1. ビジュアル指示（英語）]
+Create a professional {aspect_ratio} Japanese advertisement banner for {product_name}.
+Visual style: {mood}, {productPresentation}. {humanElement}.
+Color palette: primary {primary}, accent {accent}, background {background}.
+Overall feel: {kvPhilosophy — KVとしての世界観}.
+
+[2. 構図・視線誘導（英語）]
+Layout: {gazeFlow} eye flow pattern.
+{gazeDescription — 具体的なゾーン配置}
+Composition: {composition — 具体的構図}
+
+[3. 日本語テキスト配置]
+Place the following Japanese text directly in the image:
+- HEADLINE: '{headline}' — bold {typography}, {headline_position}, high contrast, clearly legible
+- SUB: '{subHeadline}' — semi-bold, positioned below headline
+- CTA: '{ctaText}' — {ctaColor} rounded button, {cta_position}
+{offerBadge指示 — null時省略}
+
+[4. テキスト品質指示]
+CRITICAL: All Japanese text must be perfectly rendered and legible.
+- Sufficient contrast ratio between text and background
+- No text cut off at edges (maintain 5% safe margin on all sides)
+- Clean, modern sans-serif font for Japanese characters
+- Text hierarchy: headline largest, sub smaller, CTA button text medium
+
+[5. ネガティブ指示]
+Do NOT include: watermarks, blurry text, overlapping text elements, English translations of Japanese text, stock photo watermarks, excessive visual clutter.
+
+[6. ブランド差別化]
+{brand_directive — ロゴ配置等}
+Differentiation: {differentiator — 競合バナーとの視覚的差別化}
+```
+
+各バナーの fullBannerPrompt を `bannerSpecs[]` に保持。
+
+---
+
+## Phase 3: ベクトル品質ゲート（生成前検証）
+
+**Gemini に画像生成を投げる前に、プロンプトの品質をベクトルで検証する。**
+ダメなプロンプトを事前に弾く = APIコスト削減 + 品質保証。
+
+### ベクトル検証コード
+
+```python
+# all_vectors.json 読み込み
+all_vectors = json.load(open(f'research-park/output/{slug}/all_vectors.json'))
+comp_vecs = [np.array(v['vector']) for v in all_vectors if v['category'] == 'competitor_message']
+concept_vec = np.array(strategy['concept']['conceptVector'])
+n1_demand_vec = np.array([v['vector'] for v in all_vectors if v['category'] == 'layer_demand' and v['layer'] == primary_layer][0])
+
+# formatStrategy.banner の基準値
+checkpoints = strategy['formatStrategy']['banner']['vectorCheckpoints']
+# headline_vs_concept >= 0.50, headline_vs_competitor <= 0.55, inter_banner_diversity <= 0.70
+
+# 各バナーのヘッドラインをベクトル化
+banner_vecs = []
+for spec in bannerSpecs:
+    vec = embed(spec['headline'] + ' ' + spec['subHeadline'])
+    spec['headlineVector'] = vec
+    banner_vecs.append({'index': spec['bannerIndex'], 'vector': vec, 'headline': spec['headline']})
+
+gate_results = []
+all_pass = True
+
+# === 検証1: コンセプト一貫性（headline × concept >= 0.50）===
+print("\\n=== 検証1: コンセプト一貫性 ===")
+for bv in banner_vecs:
+    sim = cosine_sim(bv['vector'], concept_vec)
+    ok = sim >= 0.50
+    if not ok: all_pass = False
+    print(f"  Banner {bv['index']:02d} 「{bv['headline'][:15]}」× コンセプト: sim={sim:.3f} {'✅' if ok else '⚠️再生成'}")
+    gate_results.append({'index': bv['index'], 'check': 'concept', 'sim': sim, 'pass': ok})
+
+# === 検証2: 競合差別化（headline × competitor_avg <= 0.55）===
+print("\\n=== 検証2: 競合差別化 ===")
+for bv in banner_vecs:
+    avg = np.mean([cosine_sim(bv['vector'], c) for c in comp_vecs])
+    ok = avg <= 0.55
+    if not ok: all_pass = False
+    print(f"  Banner {bv['index']:02d} 「{bv['headline'][:15]}」× 競合平均: sim={avg:.3f} {'✅' if ok else '⚠️競合に近い'}")
+    gate_results.append({'index': bv['index'], 'check': 'competitor', 'sim': avg, 'pass': ok})
+
+# === 検証3: バナー間多様性（inter_banner sim <= 0.70）===
+print("\\n=== 検証3: バナー間多様性 ===")
+diversity_issues = []
+for i in range(len(banner_vecs)):
+    for j in range(i+1, len(banner_vecs)):
+        sim = cosine_sim(banner_vecs[i]['vector'], banner_vecs[j]['vector'])
+        if sim > 0.70:
+            all_pass = False
+            diversity_issues.append((banner_vecs[i]['index'], banner_vecs[j]['index'], sim))
+            print(f"  ⚠️ Banner {banner_vecs[i]['index']:02d} × Banner {banner_vecs[j]['index']:02d}: sim={sim:.3f} 似すぎ")
+
+if not diversity_issues:
+    print("  ✅ 全バナー間の多様性OK")
+
+# === 検証4: N1需要との刺さり度（参考値）===
+print("\\n=== 検証4: N1需要 刺さり度（参考）===")
+for bv in banner_vecs:
+    sim = cosine_sim(bv['vector'], n1_demand_vec)
+    print(f"  Banner {bv['index']:02d}: sim={sim:.3f}")
+
+# ゲート判定
+if all_pass:
+    print("\\n✅ 品質ゲート ALL PASS → Phase 4 へ")
+else:
+    print("\\n⚠️ 品質ゲート FAIL あり → 該当バナーのヘッドライン/フック角度を自動修正して再検証")
+```
+
+### ゲート不通過時の自動修正
+
+- **コンセプト一貫性 FAIL** → ヘッドラインをコンセプトに寄せて再生成
+- **競合差別化 FAIL** → フック角度を変更、または表現を差別化
+- **多様性 FAIL** → 類似ペアの片方のフック角度を変更
+- 自動修正後に再検証。3回トライしてもFAILなら、パクに報告して判断を仰ぐ
+
+---
+
+## Phase 4: Nano Banana Pro 画像生成
+
+N枚を `gemini-3-pro-image-preview` で生成。
+
+```python
+import subprocess, os, time
+from google import genai
+from google.genai import types
+
+def _load_env(var):
+    if not os.environ.get(var):
+        try:
+            r = subprocess.run(['zsh','-i','-c',f'echo ${var}'], capture_output=True, text=True, timeout=5)
+            v = r.stdout.strip()
+            if v: os.environ[var] = v
+        except: pass
+for _v in ['GEMINI_API_KEY_1','GEMINI_API_KEY_2','GEMINI_API_KEY_3']:
+    _load_env(_v)
+
+API_KEYS = [k for k in [os.environ.get(f'GEMINI_API_KEY_{i}','').strip() for i in range(1,4)] if k]
+clients = [genai.Client(api_key=k) for k in API_KEYS]
+
+slug = '{slug}'
+out_dir = f'banner-park/output/{slug}'
+banner_dir = f'{out_dir}/banners'
+spec_dir = f'{out_dir}/specs'
+os.makedirs(banner_dir, exist_ok=True)
+os.makedirs(spec_dir, exist_ok=True)
+
+# ロゴ参照画像（あれば Gemini マルチモーダル入力で渡す）
+logo = None
+logo_path = f'assets/{slug}/logo.png'
+if os.path.exists(logo_path):
+    with open(logo_path, 'rb') as f:
+        logo = f.read()
+
+ok = ng = 0
+
+for i, spec in enumerate(bannerSpecs):
+    fn = f"banner_{spec['bannerIndex']:02d}.png"
+    fp = os.path.join(banner_dir, fn)
+    if os.path.exists(fp):
+        ok += 1
+        continue
+
+    prompt = spec['fullBannerPrompt']
+    contents = ([types.Part.from_bytes(data=logo, mime_type='image/png'),
+                 prompt + ' Include the provided logo at top-right corner, small size.'] if logo else prompt)
+
+    for attempt in range(3):
+        c = clients[(i + attempt) % len(clients)]
+        try:
+            resp = c.models.generate_content(
+                model='gemini-3-pro-image-preview',
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    response_modalities=['IMAGE'],
+                    image_config=types.ImageConfig(aspect_ratio=spec['aspectRatio'])))
+            img = next((p.inline_data.data for p in resp.parts if p.inline_data), None)
+            if not img or len(img) < 10240:
+                if attempt < 2:
+                    time.sleep(3)
+                    continue
+                ng += 1
+                break
+            with open(fp, 'wb') as f:
+                f.write(img)
+            ok += 1
+            break
+        except Exception as e:
+            if attempt < 2:
+                time.sleep(5)
+            else:
+                ng += 1
+    time.sleep(2)
+
+    # bannerSpec を JSON として保存
+    spec_path = os.path.join(spec_dir, f"banner_{spec['bannerIndex']:02d}_spec.json")
+    with open(spec_path, 'w', encoding='utf-8') as f:
+        json.dump(spec, f, ensure_ascii=False, indent=2)
+
+print(f'\\n=== 生成結果: {ok}/{len(bannerSpecs)} OK, {ng}/{len(bannerSpecs)} NG ===')
+```
+
+---
+
+## Phase 5: テキスト品質 + KV品質検証
+
+### 5-A: テキスト品質検証
+
+Gemini Flash で全画像の日本語テキスト読み取り検証。
+
+```python
+client_flash = genai.Client(api_key=os.environ['GEMINI_API_KEY_1'])
+import glob
+
+files = sorted(glob.glob(f'{banner_dir}/*.png'))
+text_issues = []
+
+for fp in files:
+    with open(fp, 'rb') as f:
+        img = f.read()
+    r = client_flash.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=[
+            types.Part.from_bytes(data=img, mime_type='image/png'),
+            'このバナー画像内の日本語テキストを全て読み取れ。以下を判定:\n'
+            '1. テキストが切れていないか\n'
+            '2. 文字化け・誤字がないか\n'
+            '3. テキストの視認性（コントラスト十分か）\n'
+            '問題なければ「OK」のみ。問題あれば「ISSUE: {具体的な問題}」で報告。'
+        ])
+    has_issue = 'ISSUE' in r.text.upper()
+    print(f"{'⚠️' if has_issue else '✅'} {os.path.basename(fp)}: {r.text.strip()[:100]}")
+    if has_issue:
+        text_issues.append(os.path.basename(fp))
+```
+
+テキスト問題あり → 該当バナーを再生成（最大3回リトライ）。
+
+### 5-B: KV品質検証
+
+各バナーが「キービジュアルとして成立しているか」をAIが判定:
+
+```python
+for fp in files:
+    with open(fp, 'rb') as f:
+        img = f.read()
+    kv_check = client_flash.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=[
+            types.Part.from_bytes(data=img, mime_type='image/png'),
+            f'このバナーを、商品「{product_name}」のキービジュアルとして評価してください。\n'
+            f'コンセプト: 「{concept}」\n'
+            f'ビジュアル方向性: {visual_concept}\n\n'
+            '5段階評価:\n'
+            '★5: ブランドKVレベル — そのまま公式サイトのメインビジュアルに使える\n'
+            '★4: 高品質広告 — プロが作った広告クリエイティブとして十分\n'
+            '★3: 標準品質 — 広告として機能するが特筆すべき点なし\n'
+            '★2: 品質不足 — 素人感がある、またはコンセプトとズレ\n'
+            '★1: 使用不可 — 品質問題あり\n\n'
+            '回答形式: ★X — 理由（1行）'
+        ])
+    print(f"  {os.path.basename(fp)}: {kv_check.text.strip()[:100]}")
+```
+
+★2以下 → 再生成。★3 → パクに報告（使うか判断）。★4以上 → 合格。
+
+### 5-C: 生成テキストのベクトル事後検証
+
+画像から抽出したテキストをベクトル化し、コンセプトとの乖離をチェック:
+
+```python
+for fp, spec in zip(files, bannerSpecs):
+    with open(fp, 'rb') as f:
+        img = f.read()
+    # テキスト抽出
+    r = client_flash.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=[types.Part.from_bytes(data=img, mime_type='image/png'),
+                  'この画像内の日本語テキストを全て抽出して、1行で連結して返してください。'])
+    actual_text = r.text.strip()
+    if actual_text:
+        actual_vec = embed(actual_text)
+        sim = cosine_sim(actual_vec, concept_vec)
+        print(f"  Banner {spec['bannerIndex']:02d} 実テキスト×コンセプト: sim={sim:.3f} {'✅' if sim >= 0.40 else '⚠️乖離'}")
+```
+
+---
+
+## Phase 6: マーケティングインテリジェンスレポート
+
+### 6-A: レポートデータ収集
+
+Phase 0〜5 の全データを集約:
+
+```python
+report_data = {
+    'product': strategy['productIntel'],
+    'n1': strategy['primaryN1'],
+    'concept': strategy['concept'],
+    'keyVisual': strategy['keyVisual'],
+    'salesCopy': strategy['salesCopy'],
+    'formatStrategy': strategy['formatStrategy']['banner'],
+    'hookVectors': strategy['hookVectors'],
+    'bannerSpecs': bannerSpecs,
+    'gateResults': gate_results,
+    'kvScores': kv_scores,
+    'textVerification': text_results,
+    'dproResearch': dpro_research_summary,
+    'generatedAt': datetime.now().isoformat(),
+    'bannerCount': len(bannerSpecs)
+}
+```
+
+### 6-B: HTML レポート生成
+
+`banner-park/output/{slug}/report.html` を生成。
+
+レポート構成:
+
+```html
+<!-- セクション1: 表紙 -->
+<div class="cover">
+  <h1>{product_name}</h1>
+  <p class="concept">「{concept}」</p>
+  <p class="date">Banner Park v7.0 — {YYYY-MM-DD}</p>
+  <p class="count">{N}枚のバナー × {N}個の仮説</p>
+</div>
+
+<!-- セクション2: 戦略サマリー（1ページ）-->
+<div class="strategy-summary">
+  <h2>戦略サマリー</h2>
+  <!-- N1ペルソナ -->
+  <!-- コンセプト / KV / セールスコピー -->
+  <!-- バナーの役割（formatStrategy.banner） -->
+  <!-- フック角度一覧 -->
+</div>
+
+<!-- セクション3: バナーポートフォリオ -->
+<div class="portfolio">
+  <h2>バナーポートフォリオ</h2>
+  <!-- 各バナー: 画像 + 仮説カード -->
+  <!--
+    仮説カード:
+    - 仮説: {hypothesis}
+    - フック角度: {hookAngle}
+    - 視線誘導: {gazeFlow}
+    - ヘッドライン: {headline}
+    - KVスコア: ★X
+    - 狙い: {testHypothesis}
+  -->
+</div>
+
+<!-- セクション4: ベクトル検証レポート -->
+<div class="vector-report">
+  <h2>ベクトル検証レポート</h2>
+  <!-- コンセプト一貫性スコア一覧 -->
+  <!-- 競合差別化スコア一覧 -->
+  <!-- バナー間多様性マトリクス -->
+  <!-- N1需要刺さり度 -->
+</div>
+
+<!-- セクション5: テスト戦略 -->
+<div class="test-strategy">
+  <h2>テスト戦略</h2>
+  <!--
+    配信順序の推奨:
+    Round 1: フック角度の大分類テスト（常識否定 vs 共感 vs 結果提示）
+    Round 2: 勝ちフック角度内のバリエーションテスト
+    Round 3: 勝ちバリエーションの視線誘導テスト
+
+    各バナーのKPI設計:
+    - 仮説 → 検証指標 → 判定基準
+
+    判定基準:
+    - CTR: 業界平均×1.5以上 → 勝ち
+    - CVR: 直近平均×1.2以上 → 勝ち
+    - CPA: 直近平均×0.8以下 → 勝ち
+  -->
+</div>
+
+<!-- セクション6: Next Action -->
+<div class="next-action">
+  <h2>Next Action</h2>
+  <!--
+    ベクトルマップ上の空白地帯:
+    - 今回攻めなかったフック角度
+    - 競合が密集してない訴求空間
+
+    次回攻めるべき角度:
+    - 今回の結果を踏まえた仮説
+
+    勝ちパターン仮説:
+    - 「もしRound 1で常識否定が勝ったら → Round 2ではこう展開」
+    - 「もし結果提示が勝ったら → Round 2ではこう展開」
+  -->
+</div>
+```
+
+HTMLはダークテーマ。プリント時はライトテーマに自動切替（`@media print`）。
+
+### 6-C: PDF 変換
+
+```python
+# weasyprint でHTML → PDF変換
+try:
+    from weasyprint import HTML
+    HTML(filename=f'{out_dir}/report.html').write_pdf(f'{out_dir}/report.pdf')
+    print(f"✅ PDF生成完了: {out_dir}/report.pdf")
+except ImportError:
+    # weasyprint 未インストール時のフォールバック
+    print("⚠️ weasyprint未インストール。HTMLレポートのみ生成。")
+    print(f"  PDF化するには: pip install weasyprint")
+    print(f"  または report.html をブラウザで開いて Cmd+P でPDF化")
+```
+
+### 6-D: 出力ディレクトリ構造
+
+```
+banner-park/output/{PRODUCT_SLUG}/
+├── banners/                    ← バナー画像（PNG）
+│   ├── banner_01.png
+│   ├── banner_02.png
+│   └── ...
+├── specs/                      ← 各バナーの設計書（JSON）
+│   ├── banner_01_spec.json
+│   └── ...
+├── report.html                 ← レポート原本（ダークテーマ）
+└── report.pdf                  ← マーケティングインテリジェンスレポート
+```
+
+### 6-E: 完了プレゼン
+
+```
+━━━━━ BANNER PARK v7.0 完了 ━━━━━
+商品: {product_name}
+コンセプト: 「{concept}」
+
+生成結果:
+  バナー: {ok}/{total} 枚 生成成功
+  KV品質: 平均 ★{avg_kv_score}
+  テキスト品質: {text_ok}/{total} 枚 OK
+
+ベクトル検証:
+  コンセプト一貫性: 平均 sim={avg_concept_sim:.3f}
+  競合差別化: 平均 sim={avg_comp_sim:.3f}
+  バナー間多様性: {diversity_issues}件の類似ペア
+
+納品物:
+  📁 banners/ — {N}枚のバナー画像
+  📁 specs/ — {N}枚の設計書JSON
+  📄 report.html — インタラクティブレポート
+  📄 report.pdf — マーケティングインテリジェンスレポート
+
+テスト戦略:
+  Round 1: {round1_description}
+  Round 2: {round2_description}
+
+Next Action:
+  {next_action_summary}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+---
+
+## 注意事項
+
+- **前提**: `/research-park` + `/concept-park` 完了済み。strategy.json に concept / keyVisual / salesCopy / formatStrategy / hookVectors が全て入っていること
+- **Phase 0**: 選択肢ヒアリングで枚数決定。5/10/20
+- **Phase 1**: メインが直列実行（DPro MCP依存）。KV哲学フィルターで「美しい × 売れてる」だけ学ぶ
+- **Phase 2**: Claude が strategy.json を読み解いて bannerSpec(JSON) → fullBannerPrompt(自然言語) の2段変換
+- **Phase 3**: ベクトル品質ゲートは**生成前**。formatStrategy.banner.vectorCheckpoints の基準値を適用
+- **Phase 4**: Nano Banana Pro シングルエンジン。GEMINI_API_KEY 最低1本
+- **Phase 5**: テキスト + KV + ベクトルの3重検証
+- **Phase 6**: HTMLレポート + PDF（weasyprint）。「人が次に活かせる情報」を全て含む
+- **3つの魂**: 全Phaseを通じて、KVそのもの × キラーコピー × 別の仮説 を常に意識
+- **ベクトル活用3箇所**: Phase 2（hookVector選択）→ Phase 3（品質ゲート）→ Phase 5-C（事後検証）
