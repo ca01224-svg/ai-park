@@ -1,0 +1,10 @@
+# APIキー・クレデンシャル系
+GカレAPI.txt
+*.secret
+*.credentials
+credentials.json
+.env
+.env.*
+
+# OS
+.DS_Store
