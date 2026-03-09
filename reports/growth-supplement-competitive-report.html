@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>成長期サポートサプリ 競合imp分析レポート｜2025/11〜2026/03</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --accent: #e94560;
+      --accent2: #0f3460;
+      --green: #16c784;
+      --yellow: #f5a623;
+      --blue: #4a9eff;
+      --bg: #f8f9fc;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --sub: #777;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent2) 100%);
+      color: white; padding: 48px 40px 36px;
+    }
+    .header .tag { background: var(--accent); display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 16px; }
+    .header h1 { font-size: 28px; font-weight: 800; line-height: 1.4; margin-bottom: 8px; }
+    .header .meta { font-size: 13px; opacity: .7; }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+    /* CARDS */
+    .card { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .card h2 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+    .card h2 .icon { width: 24px; height: 24px; border-radius: 6px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
+    .card.full { grid-column: 1 / -1; }
+
+    /* KPI CARDS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+    .kpi { background: var(--card); border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,.06); border-left: 4px solid var(--accent); }
+    .kpi.green { border-color: var(--green); }
+    .kpi.yellow { border-color: var(--yellow); }
+    .kpi.blue { border-color: var(--blue); }
+    .kpi .label { font-size: 11px; color: var(--sub); font-weight: 600; letter-spacing: .5px; margin-bottom: 8px; }
+    .kpi .value { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
+    .kpi .sub { font-size: 12px; color: var(--sub); margin-top: 6px; }
+    .kpi .badge { display: inline-block; background: #e8f5e9; color: var(--green); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 6px; }
+    .kpi .badge.red { background: #ffeaea; color: var(--accent); }
+    .kpi .badge.yellow { background: #fff8e1; color: #e6a800; }
+
+    /* SECTION TITLE */
+    .section-title { font-size: 13px; font-weight: 700; color: var(--sub); letter-spacing: 1px; text-transform: uppercase; margin: 32px 0 12px; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+
+    /* RANKING TABLE */
+    .rank-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .rank-table th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 12px; }
+    .rank-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    .rank-table tr:hover td { background: #f9f9ff; }
+    .rank { font-size: 18px; font-weight: 800; color: var(--sub); }
+    .rank.gold { color: #f5a623; }
+    .rank.silver { color: #888; }
+    .rank.bronze { color: #cd7f32; }
+    .product-name { font-weight: 700; font-size: 14px; }
+    .highlight-row td { background: #fff0f3 !important; }
+    .self-badge { background: var(--accent); color: white; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+    .bar-cell { display: flex; align-items: center; gap: 8px; }
+    .bar-bg { flex: 1; background: #f0f0f0; border-radius: 4px; height: 8px; }
+    .bar-fill { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--accent2), var(--blue)); }
+    .bar-fill.self { background: linear-gradient(90deg, var(--accent), #ff6b8a); }
+    .imp-val { font-size: 12px; color: var(--sub); white-space: nowrap; min-width: 80px; text-align: right; }
+
+    /* TREND ARROWS */
+    .trend { font-size: 12px; font-weight: 700; }
+    .trend.up { color: var(--green); }
+    .trend.down { color: var(--accent); }
+    .trend.flat { color: var(--sub); }
+
+    /* INSIGHT BOX */
+    .insight { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); color: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; }
+    .insight h3 { font-size: 14px; opacity: .7; margin-bottom: 12px; }
+    .insight-list { list-style: none; }
+    .insight-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.1); font-size: 14px; line-height: 1.6; }
+    .insight-list li:last-child { border-bottom: none; }
+    .insight-list li::before { content: "→ "; color: var(--accent); font-weight: 700; }
+
+    /* STRATEGY CARDS */
+    .strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .strategy-card { border-radius: 12px; padding: 20px; border: 2px solid #eee; }
+    .strategy-card.threat { border-color: var(--accent); background: #fff8f8; }
+    .strategy-card.opportunity { border-color: var(--green); background: #f0fff8; }
+    .strategy-card.action { border-color: var(--blue); background: #f0f8ff; }
+    .strategy-card .tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+    .strategy-card.threat .tag { background: var(--accent); color: white; }
+    .strategy-card.opportunity .tag { background: var(--green); color: white; }
+    .strategy-card.action .tag { background: var(--blue); color: white; }
+    .strategy-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+    .strategy-card p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+    /* CHART CONTAINER */
+    .chart-wrapper { position: relative; height: 300px; }
+    .chart-wrapper-tall { position: relative; height: 400px; }
+
+    /* FOOTER */
+    .footer { text-align: center; padding: 32px; color: var(--sub); font-size: 12px; }
+
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .grid-2, .grid-3, .strategy-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="tag">COMPETITIVE INTELLIGENCE</div>
+  <h1>成長期サポートサプリ<br>競合imp分析レポート</h1>
+  <div class="meta">集計期間: 2025年11月24日〜2026年3月9日（7日間隔・全媒体）｜作成: 2026-03-09｜Claude Code 自動生成</div>
+</div>
+
+<div class="container">
+
+  <!-- KPI -->
+  <div class="section-title">サマリー</div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">市場最大規模（週次）</div>
+      <div class="value">52.4M</div>
+      <div class="sub">ヨミテ 伸長ぐんぐん習慣<br>2026年2月9日週</div>
+      <div class="badge red">↑ 1月比 +35%</div>
+    </div>
+    <div class="kpi green">
+      <div class="label">ノビエース 最高imp</div>
+      <div class="value">23.3M</div>
+      <div class="sub">For/S ノビエース<br>2026年1月19日週（Rank 2達成）</div>
+      <div class="badge">Rank 2達成</div>
+    </div>
+    <div class="kpi yellow">
+      <div class="label">ノビエース 今週imp</div>
+      <div class="value">6.6M</div>
+      <div class="sub">2026年3月9日（週途中）<br>今週 Rank 2 に再浮上</div>
+      <div class="badge yellow">↑ 先週比 +135%</div>
+    </div>
+    <div class="kpi blue">
+      <div class="label">市場競合ブランド数</div>
+      <div class="value">20+</div>
+      <div class="sub">成長期サポートサプリ<br>ジャンル内ブランド数</div>
+      <div class="badge" style="background:#e8f0ff;color:var(--blue)">混戦市場</div>
+    </div>
+  </div>
+
+  <!-- TOP5 IMP RANKING 今週 -->
+  <div class="section-title">今週 impランキング（2026年3月9日週）</div>
+  <div class="card" style="margin-bottom:20px">
+    <h2><span class="icon">🏆</span>全媒体 今週 impランキング TOP10</h2>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th style="width:60px">順位</th>
+          <th>商材名</th>
+          <th>imp（予測消費額増加額）</th>
+          <th style="width:100px">前週比</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank gold">1</span></td>
+          <td><span class="product-name">ヨミテ 伸長ぐんぐん習慣</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div>
+              <span class="imp-val">14,290,105</span>
+            </div>
+          </td>
+          <td><span class="trend down">↓ -57%</span></td>
+        </tr>
+        <tr class="highlight-row">
+          <td><span class="rank silver">2</span></td>
+          <td><span class="product-name">For/S ノビエース</span><span class="self-badge">自社</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill self" style="width:46%"></div></div>
+              <span class="imp-val">6,606,082</span>
+            </div>
+          </td>
+          <td><span class="trend up">↑ +135%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank bronze">3</span></td>
+          <td><span class="product-name">クラウディア GPCワン プレミアム</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:22%"></div></div>
+              <span class="imp-val">3,094,930</span>
+            </div>
+          </td>
+          <td><span class="trend down">↓ -34%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">4</span></td>
+          <td><span class="product-name">LEFT/U セノッピーグミ</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:14%"></div></div>
+              <span class="imp-val">2,006,958</span>
+            </div>
+          </td>
+          <td><span class="trend down">↓ -62%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">5</span></td>
+          <td><span class="product-name">アストリション ジュニアプロテイン</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:12%"></div></div>
+              <span class="imp-val">1,702,048</span>
+            </div>
+          </td>
+          <td><span class="trend up">↑ +28%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">6</span></td>
+          <td><span class="product-name">エメレ ドクターセノール</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div>
+              <span class="imp-val">1,376,496</span>
+            </div>
+          </td>
+          <td><span class="trend up">↑ +3%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">7</span></td>
+          <td><span class="product-name">LEFT/U セノッピー（本体）</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:7%"></div></div>
+              <span class="imp-val">930,764</span>
+            </div>
+          </td>
+          <td><span class="trend flat">→ +13%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">8</span></td>
+          <td><span class="product-name">ロート製薬 セノビック パフォーマンスUP</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:5%"></div></div>
+              <span class="imp-val">692,800</span>
+            </div>
+          </td>
+          <td><span class="trend up">↑ +20%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">9</span></td>
+          <td><span class="product-name">LEFT/U セノッピーチュアブル</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:4%"></div></div>
+              <span class="imp-val">594,951</span>
+            </div>
+          </td>
+          <td><span class="trend down">↓ -96%</span></td>
+        </tr>
+        <tr>
+          <td><span class="rank">10</span></td>
+          <td><span class="product-name">Prisma ボーンスティック</span></td>
+          <td>
+            <div class="bar-cell">
+              <div class="bar-bg"><div class="bar-fill" style="width:4%"></div></div>
+              <span class="imp-val">549,024</span>
+            </div>
+          </td>
+          <td><span class="trend down">↓ -35%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="section-title">imp推移グラフ</div>
+  <div class="grid-2">
+    <div class="card">
+      <h2><span class="icon">📈</span>主要商材 imp週次推移</h2>
+      <div class="chart-wrapper-tall">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="icon">🎯</span>ノビエース imp＆ランク推移</h2>
+      <div class="chart-wrapper-tall">
+        <canvas id="nobiChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKET SHARE PIE -->
+  <div class="grid-2">
+    <div class="card">
+      <h2><span class="icon">🥧</span>今週 impシェア（TOP6）</h2>
+      <div class="chart-wrapper">
+        <canvas id="shareChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="icon">📊</span>月次 imp合計（TOP3商材）</h2>
+      <div class="chart-wrapper">
+        <canvas id="monthChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section-title">競合分析 インサイト</div>
+  <div class="insight">
+    <h3>🔍 データから読み取れる市場構造</h3>
+    <ul class="insight-list">
+      <li><strong>ヨミテ 伸長ぐんぐん習慣が市場を支配</strong> — 1月〜2月にかけてピーク週52.4Mを記録。2位以下を圧倒する独走状態。ただし3月に入り急落（-57%/週）しており、競合が入り込むチャンスが生まれている</li>
+      <li><strong>ノビエース(自社)は1月19日週に歴史的ピーク 23.3M（Rank 2）</strong> — この時期に何かプロモーション施策があったか要確認。今週(3/9)も再びRank 2に浮上しており「第二の波」の兆候あり</li>
+      <li><strong>LEFT/U セノッピーが2商品（グミ＋チュアブル）で市場を挟み撃ち</strong> — 単品では対抗しづらいが、両商品のimpが急減しており競合圧力が低下中</li>
+      <li><strong>3月は市場が縮小フェーズ</strong> — ヨミテ・セノッピーいずれも前週比-50〜60%。入学シーズン前（4月）に向けた「需要の谷」に入っている可能性が高い</li>
+      <li><strong>新興プレイヤーの台頭は限定的</strong> — pupu ジュエン・KENSHOU・アストリションが中位で存在感を示しているが、上位3強を崩すには至っていない</li>
+    </ul>
+  </div>
+
+  <!-- STRATEGY -->
+  <div class="section-title">ノビエース 戦略示唆</div>
+  <div class="strategy-grid">
+    <div class="strategy-card threat">
+      <span class="tag">⚠ リスク</span>
+      <h4>ヨミテの「3月の谷」を油断しない</h4>
+      <p>ヨミテは1月ピーク後に落ちているが、4月入学シーズンに向けて再び投資増加する可能性が高い。今の「弱い時期」は一時的とみるべき。</p>
+    </div>
+    <div class="strategy-card opportunity">
+      <span class="tag">🎯 チャンス</span>
+      <h4>3〜4月「入学シーズン」での先手</h4>
+      <p>今週のRank 2浮上は吉兆。1月ピーク時の施策（インフルエンサー？LP改善？）を特定し、同様の打ち手を4月入学前に仕掛けると市場ポジションが固まる。</p>
+    </div>
+    <div class="strategy-card action">
+      <span class="tag">🚀 アクション</span>
+      <h4>1月ピーク要因の解明 → 再現</h4>
+      <p>1/12〜1/19で14.5M→23.3Mに急上昇した原因を特定する。CV率・LP流入元・媒体構成を確認し、再現性ある勝ちパターンを3〜4月に展開。</p>
+    </div>
+  </div>
+
+  <!-- COMPETITOR MAP -->
+  <div class="section-title">競合ポジショニングマップ</div>
+  <div class="card full" style="margin-bottom:20px">
+    <h2><span class="icon">🗺</span>主要競合の特性整理</h2>
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>商材名</th>
+          <th>直近avg imp</th>
+          <th>最高imp</th>
+          <th>傾向</th>
+          <th>特徴・ポジション</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="product-name">ヨミテ 伸長ぐんぐん習慣</span></td>
+          <td>28,000,000</td>
+          <td>52,444,956</td>
+          <td><span class="trend down">↓ 急落中</span></td>
+          <td>圧倒的王者。1〜2月に集中投資。3月以降急落。クリエイティブ量が多い</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">LEFT/U セノッピーグミ</span></td>
+          <td>4,000,000</td>
+          <td>22,543,510</td>
+          <td><span class="trend down">↓ 縮小</span></td>
+          <td>グミ形態で子ども訴求。チュアブルと2商品展開。12月に首位獲得あり</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">LEFT/U セノッピーチュアブル</span></td>
+          <td>5,000,000</td>
+          <td>13,312,215</td>
+          <td><span class="trend down">↓ 縮小</span></td>
+          <td>親訴求型。グミと合わせて市場を挟む2商品戦略。2月がピーク</td>
+        </tr>
+        <tr class="highlight-row">
+          <td><span class="product-name">For/S ノビエース</span><span class="self-badge">自社</span></td>
+          <td>6,200,000</td>
+          <td>23,344,814</td>
+          <td><span class="trend up">↑ 今週急浮上</span></td>
+          <td>1月ピーク後に一時落ちたが今週Rank 2に再浮上。波がある。1月施策要因特定が急務</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">クラウディア GPCワン プレミアム</span></td>
+          <td>3,500,000</td>
+          <td>6,457,450</td>
+          <td><span class="trend flat">→ 安定</span></td>
+          <td>中位固定。極端な増減なし。GPC訴求で差別化。安定した広告出稿が特徴</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">ロート製薬 セノビック</span></td>
+          <td>1,500,000</td>
+          <td>4,990,906</td>
+          <td><span class="trend flat">→ 安定</span></td>
+          <td>大手ブランド力あり。認知は強いがimpでは中位。パフォーマンスUP・PLUS等バリエ展開</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">Prisma ボーンスティック</span></td>
+          <td>1,800,000</td>
+          <td>4,238,618</td>
+          <td><span class="trend up">↑ 成長中</span></td>
+          <td>12月から台頭。スティック形態で差別化。今後の動向注視</td>
+        </tr>
+        <tr>
+          <td><span class="product-name">アストリション ジュニアプロテイン</span></td>
+          <td>1,400,000</td>
+          <td>2,840,228</td>
+          <td><span class="trend up">↑ 成長中</span></td>
+          <td>プロテイン切り口で差別化。スポーツ×成長訴求。中位から上昇傾向</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="insight" style="background: linear-gradient(135deg, #0a3d0a, #1a5c1a);">
+    <h3>📌 結論 ＆ 推奨アクション</h3>
+    <ul class="insight-list">
+      <li><strong>今週(3/9)のRank 2浮上を「上昇気流」と捉える</strong> — 市場全体がヨミテ主導で縮小する中、ノビエースのシェアは相対的に高まっている</li>
+      <li><strong>1月19日週の「23.3M・Rank 2」の再現を最優先目標に</strong> — その週に何が違ったのか（LP・素材・媒体・CPA目標）を解析し、4月入学シーズンに向けて同等の投資を仕掛ける</li>
+      <li><strong>ヨミテの「勝ちクリエイティブ」を研究する</strong> — 月30-50M規模のimpを維持してきた訴求パターン・フォーマット・フック構造を解析し、ノビエースのクリエイティブに転用できる要素を抽出する</li>
+      <li><strong>セノッピーの「2商品戦略」に対抗するバリエ展開を検討</strong> — グミ・チュアブル等の剤形展開でセグメントカバレッジを広げ、検討層を逃さない構造を作る</li>
+    </ul>
+  </div>
+
+  <div class="footer">成長期サポートサプリ競合imp分析レポート｜Claude Code 自動生成｜2026-03-09｜機密情報 - 社内限り</div>
+
+</div>
+
+<!-- CHARTS JS -->
+<script>
+const dates = ['11/24','12/1','12/8','12/15','12/22','12/29','1/5','1/12','1/19','1/26','2/2','2/9','2/16','2/23','3/2','3/9'];
+
+// ノビエース imp
+const nobiImp = [2565317,3800000,4712575,6762828,4222184,3193870,3429882,14494032,23344814,6546165,4099716,5666116,5451648,2182384,2811656,6606082];
+// ノビエース rank
+const nobiRank = [6,5,5,4,6,4,3,3,2,3,5,5,4,5,5,2];
+
+// ヨミテ
+const etemeImp = [4266535,5500000,10730102,18202139,12329022,7294772,7475882,38964348,38443226,35619207,41377072,52444956,31652472,39616271,33278718,14290105];
+
+// セノッピーグミ
+const senopGrImp = [2284772,2019578,2019578,10244208,22543510,3981206,3069967,6974391,3499570,3663372,15254423,11699905,3037980,4692042,5274388,2006958];
+
+// クラウディア
+const claudImp = [1634256,1000000,1000000,1200000,3000000,1735166,0,0,0,0,0,6457450,4858582,3149486,4680846,3094930];
+
+// Chart 1: Trend
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: dates,
+    datasets: [
+      {
+        label: 'ヨミテ 伸長ぐんぐん習慣',
+        data: etemeImp,
+        borderColor: '#e94560',
+        backgroundColor: 'rgba(233,69,96,.1)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        tension: 0.3,
+        fill: true
+      },
+      {
+        label: 'For/S ノビエース（自社）',
+        data: nobiImp,
+        borderColor: '#4a9eff',
+        backgroundColor: 'rgba(74,158,255,.15)',
+        borderWidth: 3,
+        pointRadius: 4,
+        tension: 0.3,
+        fill: true,
+        borderDash: []
+      },
+      {
+        label: 'LEFT/U セノッピーグミ',
+        data: senopGrImp,
+        borderColor: '#f5a623',
+        backgroundColor: 'rgba(245,166,35,.05)',
+        borderWidth: 2,
+        pointRadius: 3,
+        tension: 0.3,
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } } },
+    scales: {
+      y: {
+        ticks: { callback: v => v >= 1000000 ? (v/1000000).toFixed(0)+'M' : v, font: { size: 10 } },
+        grid: { color: '#f0f0f0' }
+      },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// Chart 2: ノビエース dual axis
+new Chart(document.getElementById('nobiChart'), {
+  type: 'bar',
+  data: {
+    labels: dates,
+    datasets: [
+      {
+        label: 'imp（左軸）',
+        data: nobiImp,
+        backgroundColor: dates.map((d,i) => nobiRank[i] <= 2 ? 'rgba(233,69,96,.8)' : 'rgba(74,158,255,.6)'),
+        yAxisID: 'y',
+        order: 2
+      },
+      {
+        label: 'ランク（右軸）',
+        data: nobiRank,
+        type: 'line',
+        borderColor: '#1a1a2e',
+        backgroundColor: 'transparent',
+        pointRadius: 5,
+        pointBackgroundColor: '#1a1a2e',
+        borderWidth: 2,
+        tension: 0.3,
+        yAxisID: 'y1',
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 } } },
+      annotation: {}
+    },
+    scales: {
+      y: {
+        position: 'left',
+        ticks: { callback: v => v >= 1000000 ? (v/1000000).toFixed(0)+'M' : v, font: { size: 10 } },
+        grid: { color: '#f0f0f0' }
+      },
+      y1: {
+        position: 'right',
+        reverse: true,
+        min: 1, max: 10,
+        grid: { drawOnChartArea: false },
+        ticks: { stepSize: 1, font: { size: 10 }, callback: v => v+'位' }
+      },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// Chart 3: Share pie
+new Chart(document.getElementById('shareChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['ヨミテ 伸長ぐんぐん習慣', 'For/S ノビエース（自社）', 'クラウディア GPCワン', 'LEFT/U セノッピーグミ', 'アストリション', 'その他'],
+    datasets: [{
+      data: [14290105, 6606082, 3094930, 2006958, 1702048, 3500000],
+      backgroundColor: ['#e94560','#4a9eff','#f5a623','#16c784','#9b59b6','#ddd'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.raw/1000000).toFixed(1) + 'M' } }
+    }
+  }
+});
+
+// Chart 4: Monthly bar
+new Chart(document.getElementById('monthChart'), {
+  type: 'bar',
+  data: {
+    labels: ['11月', '12月', '1月', '2月', '3月(途中)'],
+    datasets: [
+      {
+        label: 'ヨミテ 伸長ぐんぐん習慣',
+        data: [4266535, (5500000+10730102+18202139+12329022+7294772), (7475882+38964348+38443226+35619207), (41377072+52444956+31652472+39616271), (33278718+14290105)],
+        backgroundColor: 'rgba(233,69,96,.8)'
+      },
+      {
+        label: 'For/S ノビエース（自社）',
+        data: [2565317, (3800000+4712575+6762828+4222184+3193870), (3429882+14494032+23344814+6546165), (4099716+5666116+5451648+2182384), (2811656+6606082)],
+        backgroundColor: 'rgba(74,158,255,.8)'
+      },
+      {
+        label: 'LEFT/U セノッピーグミ',
+        data: [2284772, (2019578+10244208+22543510+3981206), (3069967+6974391+3499570+3663372), (15254423+11699905+3037980+4692042), (5274388+2006958)],
+        backgroundColor: 'rgba(245,166,35,.8)'
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } },
+    scales: {
+      x: { stacked: false, ticks: { font: { size: 11 } } },
+      y: {
+        ticks: { callback: v => v >= 1000000 ? (v/1000000).toFixed(0)+'M' : v, font: { size: 10 } },
+        grid: { color: '#f0f0f0' }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
