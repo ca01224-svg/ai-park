@@ -269,11 +269,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <!-- ★改善⑤ 動画: srcをHTMLに書かずJSで注入（ECフォース書き換え対策） -->
         <!-- ★★★ 動画URLを変更する場合は末尾の <script> 内の VIDEO_SOURCES を編集してください ★★★ -->
-        <style>
-          /* srcがない間はvideoを非表示にしてプレースホルダーimgのみ表示 */
-          .videowrap video:not([src]) { display: none; }
-          .videowrap video { display: block; width: 100%; }
-        </style>
         <div class="videowrap">
           <video class="video_lpo0_module" loop autoplay muted playsinline width="100%" preload="none"></video>
           <img id="video_lpo0" src="{{ file_root_path }}/image/proust2/LP/v12-2/1.webp"
@@ -475,16 +470,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   var targets = [];
   Object.keys(VIDEO_SOURCES).forEach(function(cls) {
-    var el = document.querySelector('.' + cls);
-    if (el) targets.push({ el: el, cls: cls });
+    var video = document.querySelector('.' + cls);
+    if (!video) return;
+    // videowrapがある場合は親を監視、ない場合はvideo自身を監視
+    var observed = video.closest('.videowrap') || video;
+    targets.push({ video: video, observed: observed, cls: cls });
   });
   if (!targets.length) return;
 
-  function loadVideo(el, cls) {
-    el.src = VIDEO_SOURCES[cls];
-    el.load();
-    el.play().catch(function() {});
-    var placeholder = el.parentNode.querySelector('img');
+  function loadVideo(video, cls) {
+    video.src = VIDEO_SOURCES[cls];
+    video.load();
+    video.play().catch(function() {});
+    var placeholder = video.parentNode.querySelector('img');
     if (placeholder) placeholder.style.display = 'none';
   }
 
@@ -492,18 +490,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting) return;
-        var cls = Object.keys(VIDEO_SOURCES).filter(function(c) {
-          return entry.target.classList.contains(c);
-        })[0];
-        if (cls) {
-          loadVideo(entry.target, cls);
+        var t = targets.filter(function(t) { return t.observed === entry.target; })[0];
+        if (t) {
+          loadVideo(t.video, t.cls);
           obs.unobserve(entry.target);
         }
       });
     }, { rootMargin: '200px 0px' });
-    targets.forEach(function(t) { obs.observe(t.el); });
+    targets.forEach(function(t) { obs.observe(t.observed); });
   } else {
-    targets.forEach(function(t) { loadVideo(t.el, t.cls); });
+    targets.forEach(function(t) { loadVideo(t.video, t.cls); });
   }
 })();
 </script>
