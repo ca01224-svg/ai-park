@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>プルーストLP 高速化コード</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Helvetica Neue', sans-serif; background: #0f1117; color: #e0e0e0; margin: 0; padding: 0; }
+
+  .top-bar {
+    background: #1a1f2e;
+    border-bottom: 2px solid #2e3450;
+    padding: 20px 32px;
+  }
+  .top-bar h1 { margin: 0 0 4px; font-size: 18px; color: #fff; }
+  .top-bar p  { margin: 0; font-size: 12px; color: #888; }
+
+  .toc {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 14px 32px;
+    background: #13161f;
+    border-bottom: 1px solid #2e3450;
+  }
+  .toc a {
+    text-decoration: none; font-size: 12px; font-weight: 700;
+    padding: 5px 14px; border-radius: 20px; border: 1px solid;
+  }
+  .toc a:hover { opacity: 0.8; }
+  .toc-head   { color: #58a6ff; border-color: #58a6ff; }
+  .toc-body   { color: #56d364; border-color: #56d364; }
+  .toc-css    { color: #e3b341; border-color: #e3b341; }
+  .toc-js     { color: #d2a8ff; border-color: #d2a8ff; }
+  .toc-footer { color: #f0883e; border-color: #f0883e; }
+
+  .section {
+    padding: 32px 32px 0;
+    max-width: 1100px;
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 12px;
+  }
+  .section-label {
+    font-size: 20px; font-weight: 900; letter-spacing: 1px;
+  }
+  .section-where {
+    font-size: 13px;
+    background: #1e2230;
+    border: 1px solid #2e3450;
+    border-left: 4px solid var(--c);
+    border-radius: 6px;
+    padding: 10px 16px;
+    color: #ccc;
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .section-where strong { color: #fff; }
+  .copy-btn {
+    background: var(--c); color: #000;
+    border: none; padding: 7px 22px;
+    border-radius: 5px; cursor: pointer;
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 8px;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { opacity: 0.8; }
+  .copy-btn.copied { background: #388e3c !important; color: #fff; }
+
+  pre {
+    background: #161b26;
+    border: 1px solid #2e3450;
+    border-top: 3px solid var(--c);
+    border-radius: 0 0 8px 8px;
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.7;
+    white-space: pre;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    max-height: 480px;
+    overflow-y: auto;
+    margin: 0 0 40px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #2e3450;
+    margin: 0 32px;
+  }
+
+  /* カラー変数 */
+  .sec-head   { --c: #58a6ff; }
+  .sec-body   { --c: #56d364; }
+  .sec-css    { --c: #e3b341; }
+  .sec-js     { --c: #d2a8ff; }
+  .sec-footer { --c: #f0883e; }
+
+  .note {
+    font-size: 11px; color: #888;
+    margin-bottom: 6px;
+  }
+  .unchanged-badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 3px;
+    background: #252a3a; color: #666;
+    margin-left: 8px; vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>🚀 プルーストクリーム アンケートLP — 高速化コード 貼り付け用</h1>
+  <p>上から順に、管理画面の各欄に丸ごと貼り付けてください（全部置き換えでOK）</p>
+</div>
+
+<div class="toc">
+  <span style="font-size:12px; color:#666; align-self:center;">ジャンプ →</span>
+  <a class="toc-head"   href="#sec-head">① HEAD</a>
+  <a class="toc-body"   href="#sec-body">② BODY</a>
+  <a class="toc-css"    href="#sec-css">③ CSS</a>
+  <a class="toc-js"     href="#sec-js">④ JavaScript</a>
+  <a class="toc-footer" href="#sec-footer">⑤ FOOTER</a>
+</div>
+
+
+<!-- ① HEAD -->
+<div id="sec-head" class="section sec-head">
+  <div class="section-header">
+    <div class="section-label" style="color:#58a6ff;">① HEAD</div>
+    <button class="copy-btn" onclick="copyCode('code-head', this)">📋 コピー</button>
+  </div>
+  <div class="section-where">
+    管理画面 → LP編集 → <strong>「HEADタグ内への設置を推奨」欄</strong> を全選択して削除 → 貼り付け
+  </div>
+  <div class="note">変更点：jQuery を minified版に変更（約210KB削減）／preconnect追加／ファーストビュー画像をpreload／Google Fontsを非同期化</div>
+  <pre id="code-head">&lt;meta charset="utf-8"&gt;
+&lt;meta http-equiv="X-UA-Compatible" content="IE=edge"&gt;
+&lt;meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0"&gt;
+&lt;link rel="canonical" href="https://shop.rmh.co.jp/lp?u=proust_official"&gt;
+&lt;link rel="icon" href="{{ file_root_path }}/image/cropped-logo-32x32.png" sizes="16x16"&gt;
+&lt;link rel="icon" href="{{ file_root_path }}/image/cropped-logo-192x192.png" sizes="32x32"&gt;
+
+&lt;!-- CDN preconnect（DNS解決を先出し） --&gt;
+&lt;link rel="preconnect" href="https://d2w53g1q050m78.cloudfront.net" crossorigin&gt;
+&lt;link rel="preconnect" href="https://file.mysquadbeyond.com" crossorigin&gt;
+
+&lt;!-- ファーストビュー画像を先読み（LCP改善） --&gt;
+&lt;link rel="preload" as="image" href="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp"&gt;
+
+&lt;!-- jQuery minified（3.6.0.js → 3.6.0.min.js で約210KB削減） --&gt;
+&lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;
+
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;!-- Google Fonts 非同期ロード（レンダーブロッキング解消） --&gt;
+&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap" media="print" onload="this.media='all'"&gt;
+&lt;noscript&gt;&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&amp;display=swap"&gt;&lt;/noscript&gt;
+
+&lt;!-- Google Tag Manager --&gt;
+&lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PKCQRWT');&lt;/script&gt;
+&lt;!-- End Google Tag Manager --&gt;
+
+&lt;meta name="google-site-verification" content="e1ANPVTxsomc-9rFkYqXnw3iEDbI_AgN5oFUyYsq9dw" /&gt;</pre>
+</div>
+
+<hr class="divider">
+
+<!-- ② BODY -->
+<div id="sec-body" class="section sec-body">
+  <div class="section-header">
+    <div class="section-label" style="color:#56d364;">② BODY</div>
+    <button class="copy-btn" onclick="copyCode('code-body', this)">📋 コピー</button>
+  </div>
+  <div class="section-where">
+    管理画面 → LP編集 → <strong>「body（本文）」欄</strong> を全選択して削除 → 貼り付け
+  </div>
+  <div class="note">変更点：lpbody2〜6の全画像に loading="lazy" 追加／全動画（6本）に preload="none" 追加</div>
+  <pre id="code-body">&lt;script&gt;
+  window.onload = function() {
+    window.scrollTo(0, 0);
+  };
+&lt;/script&gt;
+
+&lt;div id="lpbody"&gt;
+    &lt;!-- Google Tag Manager (noscript) --&gt;
+    &lt;noscript&gt;&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PKCQRWT"
+    height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;&lt;/noscript&gt;
+    &lt;!-- End Google Tag Manager (noscript) --&gt;
+&lt;script type="text/javascript"&gt;
+  function timer(){
+      timerId = setTimeout(vanishImage, 900000);
+  }
+  function vanishImage() {
+      document.getElementById("15min").style.display = "none";
+      document.getElementById("15min2").style.display = "none";
+      document.getElementById("15min3").style.display = "none";
+      document.getElementById("15min4").style.display = "none";
+      document.getElementById("15min5").style.display = "none";
+      document.getElementById("15min6").style.display = "none";
+      document.getElementById("15min7").style.display = "none";
+      document.getElementById("15min8").style.display = "none";
+      clearTimeout(timerId);
+  }
+document.body.onload=timer;
+       &lt;/script&gt;
+
+&lt;div class="lp"&gt;
+    &lt;div class="anq_lp"&gt;
+
+        &lt;!-- lpbody1: 表示中 → lazy なし --&gt;
+        &lt;div class="lpbody lpbody1"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp"&gt;
+                &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;
+&lt;/div&gt;
+&lt;style&gt;
+.banner-with-timer {
+  position: relative;
+}
+.banner-with-timer img {
+  display: block;
+  width: 100%;
+}
+.lp-timer {
+  position: absolute;
+  right: 10%;
+  bottom: 55%;
+  background: #ffffff;
+  color: #d20000;
+  font-size: 35px;
+  font-weight: 800;
+  padding: 6px 18px;
+  border-radius: 4px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .lp-timer {
+    font-size: 18px;
+    padding: 4px 8px;
+    right: 12%;
+    bottom: 58%;
+    letter-spacing: 1px;
+  }
+}
+&lt;/style&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251014_proust_ankeLP-26.webp"&gt;
+            &lt;div class="anq_box"&gt;
+                &lt;div class="anq_box_txtbox"&gt;
+                    &lt;div class="anq_box_txtbox_right"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251014_proust_ankeLP-5.webp"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="btn_box"&gt;
+                    &lt;a href="#lpseni" class="btn btn--red btn--cubic"&gt;YES&lt;/a&gt;
+                    &lt;a href="#lpseni" class="btn btn--blue btn--cubic"&gt;NO&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- lpbody2: 非表示 → loading="lazy" --&gt;
+        &lt;div class="lpbody lpbody2 none1"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp" loading="lazy"&gt;
+            &lt;div id="lpseni"&gt;&lt;/div&gt;
+                &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;
+&lt;/div&gt;
+            &lt;div class="anq_box"&gt;
+                &lt;div class="image_number"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251014_proust_ankeLP-6.webp" loading="lazy"&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="02-Z" name="radio02" class="checkoriginal"&gt;
+                    &lt;label for="02-Z" class="radio02"&gt;1つも当てはまらない&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="02-Y" name="radio02" class="checkoriginal"&gt;
+                    &lt;label for="02-Y" class="radio02"&gt;1~2つ当てはまる&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="02-X" name="radio02" class="checkoriginal"&gt;
+                    &lt;label for="02-X" class="radio02"&gt;3~4つ当てはまる&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="02-W" name="radio02" class="checkoriginal"&gt;
+                    &lt;label for="02-W" class="radio02"&gt;全て当てはまる&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;a href="#lpseni2" class="btn2 btn--red btn--cubic btn-radio"&gt;次へ&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- lpbody3: 非表示 → loading="lazy" --&gt;
+        &lt;div class="lpbody lpbody3 none2"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp" loading="lazy"&gt;
+                &lt;div id="lpseni2"&gt;&lt;/div&gt;
+           &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;
+&lt;/div&gt;
+                &lt;div class="anq_box"&gt;
+                &lt;div class="image_number"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251014_proust_ankeLP-7.webp" loading="lazy"&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="03-Z" name="radio03" class="checkoriginal"&gt;
+                    &lt;label for="03-Z" class="radio02"&gt;ニオイを気にせず過ごしたい&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="03-Y" name="radio03" class="checkoriginal"&gt;
+                    &lt;label for="03-Y" class="radio02"&gt;汗を1日気にせず過ごしたい&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="03-X" name="radio03" class="checkoriginal"&gt;
+                    &lt;label for="03-X" class="radio02"&gt;何も気にせず好きな服を着たい&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="radio" id="03-W" name="radio03" class="checkoriginal"&gt;
+                    &lt;label for="03-W" class="radio02"&gt;周りの目を気にせず思いっきり楽しみたい&lt;/label&gt;
+                &lt;/div&gt;
+               &lt;a href="#lpseni3" class="btn3 btn--red btn--cubic btn-radio"&gt;次へ&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- lpbody4: 非表示 → loading="lazy" --&gt;
+        &lt;div class="lpbody lpbody4 none3"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp" loading="lazy"&gt;
+                &lt;div id="lpseni3"&gt;&lt;/div&gt;
+            &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;
+&lt;/div&gt;
+                &lt;div class="anq_box"&gt;
+                &lt;div class="image_number"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251023/14.webp" loading="lazy"&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="checkbox" id="04-A" name="checkbox04" class="checkoriginal"&gt;
+                    &lt;label for="04-A" class="checkbox02"&gt;ブランドNo.1の殺菌力&lt;span style="font-size: 0.7em; color: #777; vertical-align: super;"&gt;※1&lt;/span&gt;&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="checkbox" id="04-B" name="checkbox04" class="checkoriginal"&gt;
+                    &lt;label for="04-B" class="checkbox02"&gt;滝汗にも負けない制汗力
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="checkbox" id="04-C" name="checkbox04" class="checkoriginal"&gt;
+                    &lt;label for="04-C" class="checkbox02"&gt;ワキガ手術医と共同開発した商品&lt;/label&gt;
+                &lt;/div&gt;
+                &lt;div class="radio_box_style"&gt;
+                    &lt;input type="checkbox" id="04-D" name="checkbox04" class="checkoriginal"&gt;
+                    &lt;label for="04-D" class="checkbox02"&gt;累計200万本販売の実績&lt;span style="font-size: 0.7em; color: #777; vertical-align: super;"&gt;※2&lt;/span&gt;&lt;/label&gt;
+                &lt;/div&gt;
+&lt;p style="font-size:0.7em; color:#777; text-align:right;"&gt;
+  ※1 防臭効果における作用機序として
+&lt;/p&gt;
+&lt;p style="font-size:0.7em; color:#777; text-align:right;"&gt;
+  ※2 2018年10月1日〜2025年8月31日のプルーストシリーズ累計出荷本数
+&lt;/p&gt;
+                &lt;a href="#lpseni4" class="btn4 btn--red btn--cubic btn-radio"&gt;次へ&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- lpbody5: 非表示 → loading="lazy" --&gt;
+        &lt;div class="lpbody lpbody5 none4"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/LP/v11,v12/20250212/questionair_210_02.webp" loading="lazy"&gt;
+                &lt;div id="lpseni4"&gt;&lt;/div&gt;
+            &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;
+&lt;/div&gt;
+                &lt;div class="anq_box"&gt;
+                &lt;div class="image_number"&gt;
+            &lt;img src="https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust2/chat/v2/251023/15.webp" loading="lazy"&gt;
+                &lt;/div&gt;
+                &lt;div class="btn_box"&gt;
+                     &lt;a href="#chatform"  class="btn5 btn--red btn--cubic"&gt;YES&lt;/a&gt;
+                    &lt;a href="#chatform"  class="btn5 btn--blue btn--cubic"&gt;NO&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- lpbody6: 非表示 → loading="lazy" / video preload="none" --&gt;
+        &lt;div class="lpbody lpbody6 none5"&gt;
+            &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/questionair_210_01.webp" loading="lazy"&gt;
+        &lt;div class="banner-with-timer"&gt;
+            &lt;img src="{{ file_root_path }}/image/onmyskin-face/lp/v108/OMS_F_LPbanner_timer.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="lp-timer"&gt;残り 20分 00秒&lt;/div&gt;&lt;/div&gt;
+
+      &lt;div class="videowrap"&gt;
+        &lt;video class="video_lpo0_module" src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526862/600e93d2-980d-4e70-a656-c67190a2c107.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img id="video_lpo0" src="{{ file_root_path }}/image/proust2/LP/v12-2/1.webp" width="100%" loading="lazy"&gt;
+        &lt;/div&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_02.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="videowrap"&gt;
+		&lt;video class="video_lpo1_module" src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526832/7f1c94f0-73e0-4040-873b-05c00d82989e.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img id="video_lpo1" src="{{ file_root_path }}/image/proust2/LP/v9/proust2_03.webp" width="100%" loading="lazy"&gt;
+        &lt;/div&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_04.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/5.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_06.webp" width="100%" loading="lazy"&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_1.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/2 (1).webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_3.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_4.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_5.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/6.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_7.webp" width="100%" loading="lazy"&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_07.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_08.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/2.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/3.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_11.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_12.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_13.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_14.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_15.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_16.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_17.webp" width="100%" loading="lazy"&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_1.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/2 (1).webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_3.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_4.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_5.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/6.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_o7.webp" width="100%" loading="lazy"&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_18.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_19.webp" width="100%" loading="lazy"&gt;
+        &lt;div class="videowrap"&gt;
+		&lt;video class="video_lpo2_module" src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526833/7c1f259b-32b2-4e6f-a1c2-af7a5d0e9108.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img id="video_lpo2" src="{{ file_root_path }}/image/proust2/LP/v9/proust2_20.webp" width="100%" loading="lazy"&gt;
+        &lt;/div&gt;
+        &lt;div class="videowrap"&gt;
+		&lt;video class="video_lpo3_module" src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526834/24b98c01-eee4-472c-a290-06a1e022a546.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img id="video_lpo3" src="{{ file_root_path }}/image/proust2/LP/v9/proust2_21.webp" width="100%" loading="lazy"&gt;
+        &lt;/div&gt;
+        &lt;div class="videowrap"&gt;
+		&lt;video class="video_lpo4_module" src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526959/613078be-db8c-4be3-a1a3-ea8a69a602fd.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img id="video_lpo4" src="{{ file_root_path }}/image/proust2/LP/v9/proust2_22.webp" width="100%" loading="lazy"&gt;
+        &lt;/div&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_23.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_24.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_25.webp" width="100%" loading="lazy"&gt;
+		&lt;video src="https://file.mysquadbeyond.com/uploads/article_photo/photo/6526835/7004dc1a-bae0-4400-b8ba-dbc28a576aa2.mp4" loop autoplay muted playsinline width="100%" preload="none"&gt;&lt;/video&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v9/proust2_27.webp" width="100%" loading="lazy"&gt;
+
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_1.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/2 (1).webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_3.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_4.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_5.webp" width="100%" loading="lazy"&gt;
+        &lt;a href="#chatform"&gt;&lt;img src="{{ file_root_path }}/image/proust2/LP/v12-2/6.webp" width="100%" loading="lazy"&gt;&lt;/a&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proust_0_7.webp" width="100%" loading="lazy"&gt;
+        &lt;img src="{{ file_root_path }}/image/proust2/LP/v11,v12/20250212/260212proustcream_25BasicLP_chat_2.webp" width="100%" loading="lazy"&gt;
+
+&lt;/div&gt;
+__PAYMENT_FORM__
+     {# common_footer-pay_proust #}
+&lt;/div&gt;
+&lt;script&gt;
+(function () {
+  const LIMIT_MIN = 20;
+  const PREFIX      = "offer_timer_proust-cream2_v7-5";
+  const REMAIN_KEY  = PREFIX + "remainSec";
+  const EXPIRE_URL = "https://shop.rmh.co.jp/lp?u=me_proust2_cartsingle";
+
+  if (location.search.includes("reset=1")) { localStorage.removeItem(REMAIN_KEY); }
+
+  const DEFAULT_SEC = LIMIT_MIN * 60;
+  let remainSec = parseInt(localStorage.getItem(REMAIN_KEY), 10);
+  if (isNaN(remainSec) || remainSec &lt; 0 || remainSec &gt; DEFAULT_SEC) {
+    remainSec = DEFAULT_SEC;
+    localStorage.setItem(REMAIN_KEY, String(remainSec));
+  }
+
+  let timerId = null;
+
+  function render() {
+    const lpTimers = document.querySelectorAll(".lp-timer, #lp-timer");
+    const chatTimer = document.getElementById("chat-header-timer");
+    const sec = Math.max(remainSec, 0);
+    const m = String(Math.floor(sec / 60)).padStart(2, "0");
+    const s = String(sec % 60).padStart(2, "0");
+    const text = `残り時間 ${m}分${s}秒`;
+    lpTimers.forEach(el =&gt; { el.textContent = text; });
+    if (chatTimer) chatTimer.textContent = text;
+  }
+
+  function stopTick() { if (timerId !== null) { clearInterval(timerId); timerId = null; } }
+
+  function handleExpire() {
+    remainSec = 0;
+    localStorage.setItem(REMAIN_KEY, "0");
+    render(); stopTick();
+    window.location.href = EXPIRE_URL;
+  }
+
+  function startTick() {
+    if (timerId !== null) return;
+    if (remainSec &lt;= 0) { handleExpire(); return; }
+    timerId = setInterval(function () {
+      if (document.hidden) return;
+      remainSec -= 1;
+      if (remainSec &lt;= 0) { handleExpire(); return; }
+      localStorage.setItem(REMAIN_KEY, String(remainSec));
+      render();
+    }, 1000);
+  }
+
+  render();
+  if (remainSec &lt;= 0) { handleExpire(); return; }
+  if (!document.hidden) { startTick(); }
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { stopTick(); } else { startTick(); }
+  });
+})();
+&lt;/script&gt;
+&lt;script&gt;
+(function () {
+  let doneOnce = false;
+  let savedY = null;
+  let armed = false;
+
+  function isConfirmCloseButton(btn) {
+    if (!btn) return false;
+    const dialog = btn.closest('.q-dialog');
+    if (!dialog) return false;
+    const dialogText = (dialog.innerText || '').trim();
+    if (!dialogText.includes('本当に閉じますか？')) return false;
+    const btnText = (btn.innerText || '').trim();
+    return btnText === '閉じる';
+  }
+
+  function restoreScrollOnce() {
+    if (savedY == null) return;
+    const y = savedY;
+    doneOnce = true; armed = false; savedY = null;
+    try { document.activeElement && document.activeElement.blur && document.activeElement.blur(); } catch (_) {}
+    requestAnimationFrame(() =&gt; window.scrollTo(0, y));
+    setTimeout(() =&gt; window.scrollTo(0, y), 50);
+    setTimeout(() =&gt; window.scrollTo(0, y), 150);
+    try { mo.disconnect(); } catch (_) {}
+  }
+
+  document.addEventListener('click', (e) =&gt; {
+    if (doneOnce) return;
+    const btn = e.target.closest('button');
+    if (!isConfirmCloseButton(btn)) return;
+    savedY = window.scrollY; armed = true;
+    try { btn.blur && btn.blur(); } catch (_) {}
+    try { document.activeElement && document.activeElement.blur && document.activeElement.blur(); } catch (_) {}
+  }, true);
+
+  const mo = new MutationObserver(() =&gt; {
+    if (doneOnce || !armed) return;
+    const stillConfirmDialog = Array.from(document.querySelectorAll('.q-dialog'))
+      .some(d =&gt; (d.innerText || '').includes('本当に閉じますか？'));
+    if (!stillConfirmDialog) { restoreScrollOnce(); }
+  });
+  mo.observe(document.documentElement, { childList: true, subtree: true });
+})();
+&lt;/script&gt;
+&lt;script&gt;
+(function () {
+  let reentry = false;
+
+  function isFinalSurveyYesNo(a) {
+    if (!a) return false;
+    if (a.getAttribute('href') !== '#chatform') return false;
+    if (!a.closest('.anq_box')) return false;
+    const cls = a.className || '';
+    return cls.includes('btn5') && cls.includes('btn--cubic');
+  }
+
+  document.addEventListener('click', (e) =&gt; {
+    const a = e.target.closest('a');
+    if (!isFinalSurveyYesNo(a)) return;
+    if (reentry) return;
+    e.preventDefault();
+    window.scrollTo(0, 0);
+    reentry = true;
+    try {
+      a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+    } finally { reentry = false; }
+    requestAnimationFrame(() =&gt; window.scrollTo(0, 0));
+    setTimeout(() =&gt; window.scrollTo(0, 0), 50);
+    setTimeout(() =&gt; window.scrollTo(0, 0), 150);
+  }, true);
+})();
+&lt;/script&gt;</pre>
+</div>
+
+<hr class="divider">
+
+<!-- ③ CSS -->
+<div id="sec-css" class="section sec-css">
+  <div class="section-header">
+    <div class="section-label" style="color:#e3b341;">③ CSS <span class="unchanged-badge">変更なし・そのまま貼る</span></div>
+    <button class="copy-btn" onclick="copyCode('code-css', this)">📋 コピー</button>
+  </div>
+  <div class="section-where">
+    管理画面 → LP編集 → <strong>「CSS」欄</strong> を全選択して削除 → 貼り付け
+  </div>
+  <pre id="code-css">/*popup.css*/
+@charset "UTF-8";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+}
+.clearfix {
+	overflow: hidden;
+}
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+html, body {
+  height: 100%;
+}
+
+#modal-01 img {
+    width: 100%;
+}
+
+
+
+  .modal-window {
+    width: 86%;
+    height: 80%;
+    padding: 25px 0 0 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: -10%;
+    bottom: 0;
+    z-index: -1;
+    margin:auto;
+    transition: 0.3s;
+    background: #cbe1ef;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+
+  }
+  .modal-window-content {
+    width: 95%;
+    height: 90%;
+    margin:0 auto;
+    padding:0 4% 0 4%;
+    overflow-x:hidden;
+    overflow-y:scroll;
+  }
+
+.modal-window.block {
+  z-index: 99;
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+.modal-window .closebtn {
+  cursor: pointer;
+  position: absolute;
+  top: -13px;
+  right: -12px;
+  width:13%;
+  max-width:35px;
+  z-index:998;
+
+}
+.modal-window .banner_wrap {
+width:100%;
+background-color:#cbe1ef;
+
+}
+.modal-window .close_banner {
+width:95%;
+max-width:480px;
+height:auto;
+margin:0 auto 0;
+background-color:#cbe1ef;
+padding:20px 4% 20px 4%;
+
+}
+#modal-overlay {
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  position: fixed;
+  z-index: -1;
+  transition: 0.3s;
+  background: rgba(0, 0, 0, 0.8);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+#modal-overlay.block {
+  z-index: 9;
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+.close {
+cursor: pointer;
+}
+.modal-window-content ul {
+ margin:0 auto;
+ padding:0;
+}
+.modal-window-content ul li {
+ margin:15px 0 0 0;
+ padding:10px;
+ background-color:#fff;
+}
+.modal-window-content ul li:nth-child(1) {
+ margin:0;
+}
+.modal-window-content ul li dl {
+ margin:0;
+ padding:0;
+
+}
+.modal-window-content ul li dl dd{
+ margin:10px 0 0 0;
+ padding:0;
+ font-size:15px;
+ line-height:1.6em;
+
+}
+.o_icon {
+ float:left;
+ width:13%;
+ max-width:50px;
+}
+.o_namae {
+width:84%;
+float:left;
+margin:0 0 0 3%;
+color:#f18355;
+line-height:18px;
+}
+.o_namae .namae {
+font-size:17px;
+padding:0 5px;
+}
+.o_namae .tosi {
+font-size:13px;
+
+}
+.o_namae_tensen {
+padding:2px 0;
+line-height:0;
+}
+.o_star {
+width:90%;
+max-width:200px;
+padding:0 5px;
+}
+
+
+.manzoku{
+	color:#fff;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	background:#f18355;
+	font-size:70%;
+	padding:1% 3%;
+	}
+
+.star{
+	margin-right: 2px;
+	font-size:91%;
+	}
+
+.point{
+	font-size:90%;
+	}
+
+/*style.css*/
+html,body{background:#ffffff;}
+body{ margin:0; padding:0;font-family:"游ゴシック", YuGothic, "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;}
+#lp{ max-width: 740px; margin: 0 auto;}
+img{vertical-align: bottom; display: block;}
+a img:hover {
+    opacity: 0.7;
+}
+
+h1{
+    margin:0;
+}
+
+.menu {margin-top:20px;
+    padding: 0;
+}
+
+.menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #000;
+    line-height: 1;
+}
+
+.menu label {
+    font-size: 18px;
+    display: block;
+    margin: 0 0 2px 0;
+    padding :15px;
+    line-height: 1;
+    color :#fff;
+    background :#C0C0C0;
+    cursor :pointer;
+    text-align:center;
+}
+
+.menu input {
+    display: none;
+}
+
+.menu ul {
+    margin: 0;
+    background :#fff;
+    list-style: none;
+}
+
+.menu li {
+    max-height: 0;
+    margin: 5px;
+    overflow-y: hidden;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+.orange{ color: #DE531C; font-weight:700; border-left: 8px #DE531C solid; font-size: 24px; padding-left: 10px;}
+
+#menu_bar01:checked ~ #links01 li,
+#menu_bar02:checked ~ #links02 li,
+#menu_bar03:checked ~ #links03 li{
+    max-height: 500px;
+    opacity: 1;
+}
+
+footer {overflow-x: hidden;
+	max-width:100%;
+  font-size:11px;
+}
+
+footer div {
+    max-width:100%;
+    margin: 0 auto 30px;
+
+}
+footer ul {
+margin: 0px auto;
+padding: 10px 0;
+text-align:center;
+}
+footer ul li {
+	display:inline;
+margin: 0;
+padding: 0 1px 0 6px;
+border-left: 1px #000 solid;
+}
+
+footer a {
+    color: #000;
+}
+
+footer p {
+	margin:0;
+    text-align: center;
+    padding: 5px 0;
+}
+
+footer div:after {
+    content: "";
+    display: block;
+    clear: both;}
+
+#fixed{ position:fixed; margin:0 auto; z-index: 998; bottom:0; width:100%;}
+#offer_bottom{ margin:0 auto; max-width:740px;}
+
+
+__PAYMENT_FORM_CSS__
+.form_container_ec{
+    width:920px;
+}
+span.form_required_ec{
+  background: #CC0033;
+  color: #ffffff;
+}
+.landing_form_label_ec {
+  background: #FC0;
+  color:#000000 ;
+  font-size: 18px;
+}
+table.landing_form_ec {
+  border-top: 1px solid #d0dcec;
+  border-right: 1px solid #d0dcec;
+  background: #FFF;
+  border-bottom: 1px solid #999;
+}
+.landing_form_ec th {
+  background-color: #FFF1D2;
+  border-bottom: 1px solid #d0dcec;
+  border-left: 1px solid #d0dcec;
+}
+.landing_form_ec td {
+  border-bottom: 1px solid #d0dcec;
+  border-left: 1px solid #d0dcec;
+  background-color: #ffffff;
+}
+.submit_bottom_ec {
+  border: 0px;
+  width: 400px;
+  height: 150px;
+  background-size: 394px auto;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+span.form_required_sp_ec{
+  background: #CC0033;
+  color: #ffffff;
+}
+.landing_form_label_sp_ec {
+  background: #FC0;
+  color:#000000 ;
+  font-size: 18px;
+}
+.form_box_label_sp_ec {
+  background: #FFF1D2;
+  border-bottom: 1px solid #C3C3C3;
+  border-top: 1px solid #C3C3C3;
+}
+.submit_bottom_sp_ec {
+  border: 0px;
+  width: 100%;
+  height: 150px;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+#temporaryBox{
+    z-index:100000;
+}
+
+#chat_load{
+   height:100%;
+   margin: 0 auto;
+   text-align:center;
+}
+#chat_load > img{
+    width: 100%;
+  height: 500px;
+   object-fit: cover;
+   margin: 0 auto;
+}
+@media screen and (min-width:600px){
+  #chat_load{
+   height:100%;
+   margin: 0 auto;
+   text-align:center;
+}
+#chat_load > img{
+   width:30%;
+    height:auto;
+   margin: 0 auto;
+}
+}
+.bounce {
+  animation: bounce_9200 2.6s ease infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes bounce_9200 {
+  0% { transform:translateY(0) }
+  7.69231% { transform:translateY(0) }
+  15.38462% { transform:translateY(0) }
+  30.76923% { transform:translateY(-5px) }
+  38.46154% { transform:translateY(0) }
+  46.15385% { transform:translateY(-5px) }
+  61.53846% { transform:translateY(0) }
+  100% { transform:translateY(0) }
+}
+#henkinlink{
+  position: relative;
+}
+.henkinhoba{
+  position: absolute;
+   left: 0;
+  right: 0;
+      top: 74.5%;
+  padding-left:42.2%;
+}
+#riyoukiyaku{
+  position: relative;
+}
+.tomo{
+  position: absolute;
+   left: 0;
+  right: 0;
+      top: 90%;
+  padding-left:7.8%;
+}
+.videowrap {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+}
+.videowrap video,
+.videowrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.videowrap img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.videowrap {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+.videowrap video,
+.videowrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+#video {
+    position: absolute;
+    margin-top: -56%;
+    width: 85%;
+    margin-left: 7.6%;
+}
+.pc{
+    display:block;
+}
+.sp{
+    display:none;
+}
+@media (max-width: 575.98px) {
+     .pc{
+         display:none;
+    }
+    .sp{
+        display:block;
+    }
+}
+.pc{
+    display:block;
+}
+.sp{
+    display:none;
+}
+@media (max-width: 575.98px) {
+     .pc{
+         display:none;
+    }
+    .sp{
+        display:block;
+    }
+}
+ body{
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .anq_lp{
+            width: 50%;
+            margin: 0 auto;
+            padding: 50px 0;
+            background-image: url("https://ec-force.s3.amazonaws.com/rmh/uploads/image/proust/proust_hiroq_back.jpg");
+            background-repeat: repeat;
+            background-size: cover;
+        }
+        div{
+            margin: 0;
+            padding: 0;
+        }
+        p{
+            margin: 0;
+            padding: 0;
+        }
+        .none{
+            display: none!important;
+        }
+        .none1{
+            display: none;
+        }
+        .none2{
+            display: none;
+        }
+        .none3{
+            display: none;
+        }
+        .none4{
+            display: none;
+        }
+        .none5{
+            display: none;
+        }
+        .none6{
+            display: none;
+        }
+        .block{
+            display: block;
+        }
+        .lpbody{
+            margin: 0 auto;
+        }
+        img{
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 auto;
+        }
+        .image_number{
+            width: 100%;
+            margin: 0 auto 30px;
+        }
+        .lpbody1,.lpbody6{
+            margin: -50px 0;
+        }
+        .anq_box{
+            width: 95%;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #dddddd;
+            background: #fff;
+            box-shadow:
+                0 1.9px 2.5px rgba(0, 0, 0, 0.057),
+                0 5px 6.1px rgba(0, 0, 0, 0.076),
+                0 10.1px 11.4px rgba(0, 0, 0, 0.086),
+                0 19.2px 19.8px rgba(0, 0, 0, 0.092),
+                0 38.4px 34.8px rgba(0, 0, 0, 0.1),
+                0 101px 74px rgba(0, 0, 0, 0.13);
+        }
+        .anq_box_txtbox{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .anq_box_txtbox_left{
+            width: 0%;
+            text-align: center;
+            background: #CC0B42;
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .anq_box_txtbox_right{
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .btn_box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn,
+        .btn2,
+        .btn3,
+        .btn4,
+        .btn5,
+        .btn6,
+        .btn7,
+        a.btn,
+        button.btn {
+            width: 28%;
+            margin: 0 10px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.5;
+            position: relative;
+            display: inline-block;
+            padding: 1rem 4rem;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+            text-align: center;
+            vertical-align: middle;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            color: #212529;
+            border-radius: 0.5rem;
+        }
+        a.btn--red {
+            color: #000;
+            background-color: #E72B5E;
+            border-bottom: 5px solid #BF003D;
+            color: #fff;
+        }
+        a.btn--red:hover {
+            margin-top: 3px;
+            color: #fff;
+            background: #BF003D;
+            border-bottom: 2px solid #BF003D;
+        }
+        a.btn--blue {
+            color: #fff;
+            background-color: #006BCD;
+            border-bottom: 5px solid #004AA2;
+            color: #fff;
+        }
+        a.btn--blue:hover {
+            margin-top: 3px;
+            color: #fff;
+            background: #004AA2;
+            border-bottom: 2px solid #004AA2;
+        }
+        .bounce {
+            animation: bounce_5327 2.6s ease infinite;
+            transform-origin: 50% 50%;
+        }
+        @keyframes bounce_5327 {
+            0% { transform:translateY(0) }
+            7.69231% { transform:translateY(0) }
+            15.38462% { transform:translateY(0) }
+            30.76923% { transform:translateY(-15px) }
+            38.46154% { transform:translateY(0) }
+            46.15385% { transform:translateY(-15px) }
+            61.53846% { transform:translateY(0) }
+            100% { transform:translateY(0) }
+        }
+        @media screen and (max-width: 768px) {
+            .lpbody{
+                width: 100%;
+            }
+            .anq_lp{
+                width: 100%;
+            }
+            body{
+                background-image: url("https://ec-force.s3.amazonaws.com/rmh/uploads/image/proust/proust_hiroq_back.jpg");
+                background-repeat: repeat;
+                background-size: cover;
+            }
+            .btn,
+            .btn2,
+            .btn3,
+            .btn4,
+            .btn5,
+            .btn6,
+            .btn7,
+            a.btn,
+            button.btn {
+                width: 48%;
+                padding:20px 0;
+            }
+        }
+        .checkbox02 {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 30px;
+            position: relative;
+            width: auto;
+        }
+        .checkbox02::before {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            content: '';
+            display: block;
+            height: 16px;
+            left: 5px;
+            margin-top: -8px;
+            position: absolute;
+            top: 50%;
+            width: 16px;
+        }
+        .checkbox02::after {
+            border-right: 6px solid #E72B5E;
+            border-bottom: 3px solid #E72B5E;
+            content: '';
+            display: block;
+            height: 20px;
+            left: 7px;
+            margin-top: -16px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            transform: rotate(45deg);
+            width: 9px;
+        }
+        input[type=checkbox]:checked + .checkbox02::before {
+            border-color: #666;
+        }
+        input[type=checkbox]:checked + .checkbox02::after {
+            opacity: 1;
+        }
+        .checkoriginal {
+            display: none!important;
+        }
+        .radio02 {
+            box-sizing: border-box;
+            cursor: pointer;
+            display: inline-block;
+            padding: 5px 30px;
+            position: relative;
+            width: auto;
+        }
+        .radio02::before {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            content: '';
+            display: block;
+            height: 16px;
+            left: 5px;
+            margin-top: -8px;
+            position: absolute;
+            top: 50%;
+            width: 16px;
+        }
+        .radio02::after {
+            border-right: 6px solid #E72B5E;
+            border-bottom: 3px solid #E72B5E;
+            content: '';
+            display: block;
+            height: 20px;
+            left: 7px;
+            margin-top: -16px;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            transform: rotate(45deg);
+            width: 9px;
+        }
+        input[type=radio]:checked + .radio02::before {
+            border-color: #666;
+        }
+        input[type=radio]:checked + .radio02::after {
+            opacity: 1;
+        }
+        .radio_box_style{
+            margin: 10px 0;
+            padding: 10px 10px;
+            color: #000;
+            background: #E4E4E4;
+            border-radius: 5px;
+            border-bottom: 5px solid #A8A8A8;
+        }
+        .btn-radio{
+            width: 100%;
+            margin: 10px auto 0;
+            padding: 10px 0;
+        }
+        @media screen and (min-width: 768px) {
+            .anq_lp{
+                height: 100%;
+            }
+            .btn, .btn2, .btn3, .btn4, .btn5, .btn6, .btn7, a.btn, button.btn {
+                padding: 3rem;
+                font-size: 40px;
+            }
+            .radio_box_style{
+                padding: 40px 0;
+            }
+            .radio02{
+                font-size: 30px;
+            }
+            .checkbox02{
+                font-size: 30px;
+            }
+}
+.landing_form_label_ec{
+        display:none;
+}
+.menu{
+    display:none;
+}
+.last-image{
+    width:11.5%!important;
+    margin-right: 89%;
+}
+.block_ryo{
+    display:block;
+}
+#lpseni{
+    height:10px;
+}
+#lpseni2{
+    height:10px;
+}
+#lpseni3{
+    height:10px;
+}
+#lpseni4{
+    height:10px;
+}
+.form_container_ec{
+    height:0;!important;
+}
+.form_container_sp_ec{
+    height:0;!important;
+}
+div#lpbody {
+	background: url(https://d2w53g1q050m78.cloudfront.net/rmh/uploads/image/proust/background_453421953.jpg);
+	background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+div.anq_lp {
+    box-shadow: 0px 0px 50px rgb(0 0 0 / 40%);
+    background-color: #fff;
+}
+#video_lpo0 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo0_module {
+	position: absolute;
+	top: 16%;
+}
+#video_lpo1 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo1_module {
+	position: absolute;
+	top: 7%;
+}
+#video_lpo2 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo2_module {
+	position: absolute;
+	top: 18%;
+}
+#video_lpo3 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo3_module {
+	position: absolute;
+	top: 4%;
+}
+#video_lpo4 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo4_module {
+	position: absolute;
+	top: 4%;
+}
+#video_lpo5 {
+    position: relative;
+    right:0%;
+    bottom:0%;
+    width: 100%;
+}
+.video_lpo5_module {
+	position: absolute;
+	top: 4%;
+}
+}
+.wrap01_offer {
+	position: relative;
+}
+.wrap02_offer{
+}
+.wrapText01_offer{
+	position: absolute;
+    width: 92%;
+    display: block;
+    top: 49%;
+    left: 4%;
+    color: #000000;
+    font-size: 16px;
+    text-align: left;
+    line-height: 1.3;
+    paint-order: stroke;
+    font-kerning: normal;
+    text-stroke: 4px #000000;
+}
+.wrapText01_offer a {
+    color: #000000;
+}
+@media screen and (max-width: 750px) {
+    .wrapText01_offer{
+        font-size: 8px;
+    }
+}
+.form_container_ec{
+    display:none;!important;
+}
+.form_container_sp_ec{
+    display:none;!important;
+}</pre>
+</div>
+
+<hr class="divider">
+
+<!-- ④ JavaScript -->
+<div id="sec-js" class="section sec-js">
+  <div class="section-header">
+    <div class="section-label" style="color:#d2a8ff;">④ JavaScript <span class="unchanged-badge">変更なし・そのまま貼る</span></div>
+    <button class="copy-btn" onclick="copyCode('code-js', this)">📋 コピー</button>
+  </div>
+  <div class="section-where">
+    管理画面 → LP編集 → <strong>「JavaScript」欄</strong> を全選択して削除 → 貼り付け
+  </div>
+  <pre id="code-js">$('.btn').on('click', function () {
+    $('.lpbody1').addClass('none');
+    $('.lpbody2').addClass('block_ryo');
+});
+$('.btn2').on('click', function () {
+    $('.lpbody2').addClass('none');
+    $('.lpbody3').addClass('block_ryo');
+});
+$('.btn3').on('click', function () {
+    $('.lpbody3').addClass('none');
+    $('.lpbody4').addClass('block_ryo');
+});
+$('.btn4').on('click', function () {
+    $('.lpbody4').addClass('none');
+    $('.lpbody5').addClass('block_ryo');
+});
+$('.btn5').on('click', function () {
+    $('.lpbody5').addClass('none');
+    $('.lpbody6').addClass('block_ryo');
+});
+$('.btn6').on('click', function () {
+    $('.lpbody6').addClass('none');
+    $('.lpbody7').addClass('block_ryo');
+});</pre>
+</div>
+
+<hr class="divider">
+
+<!-- ⑤ FOOTER -->
+<div id="sec-footer" class="section sec-footer">
+  <div class="section-header">
+    <div class="section-label" style="color:#f0883e;">⑤ FOOTER</div>
+    <button class="copy-btn" onclick="copyCode('code-footer', this)">📋 コピー</button>
+  </div>
+  <div class="section-where">
+    管理画面 → LP編集 → <strong>「フッター」欄</strong> を全選択して削除 → 貼り付け
+  </div>
+  <div class="note">変更点：jQuery 2.2.4（重複ロード）を削除 ／ html5shiv（IE8用・不要）を削除</div>
+  <pre id="code-footer">&lt;footer&gt;
+{# footer #}
+&lt;/footer&gt;
+&lt;script src="{{ file_root_path }}/javascript/fade.js"&gt;&lt;/script&gt;
+&lt;script src="{{ file_root_path }}/javascript/popup.js"&gt;&lt;/script&gt;
+
+&lt;!-- JSON-LD --&gt;
+&lt;script type="application/ld+json"&gt;
+    {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": "プルーストクリーム",
+    "description": "現役医師監修開発の医薬部外品デオドラントクリーム！ニオイ医科学でワキガ対策『プルーストクリーム』公式ページがこちらです。",
+    "brand": {
+        "@type": "Thing",
+        "name": "ルーツ医健"
+    },
+    "offers": {
+        "@type": "Offer",
+        "priceCurrency": "JPY",
+        "price": "4980",
+        "itemCondition": "http://schema.org/UsedCondition",
+        "availability": "http://schema.org/InStock",
+         "seller": {
+            "@type": "Organization",
+            "name": "ルーツ医健"
+         }
+    }
+    }
+    &lt;/script&gt;
+    &lt;!-- End JSON-LD --&gt;</pre>
+</div>
+
+<div style="height: 60px;"></div>
+
+<script>
+function copyCode(id, btn) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✅ コピー完了！';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
