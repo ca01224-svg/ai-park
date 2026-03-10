@@ -78,7 +78,7 @@
 
     /* カテゴリ別アクティブ色 */
     .tab[data-tab="ヨミテ"].active  { background: linear-gradient(135deg, #f59e0b, #ef4444); border-color: transparent; color:#fff; }
-    .tab[data-tab="澤田"].active    { background: linear-gradient(135deg, #10b981, #06b6d4); border-color: transparent; color:#fff; }
+    .tab[data-tab="SAWADA"].active  { background: linear-gradient(135deg, #10b981, #06b6d4); border-color: transparent; color:#fff; }
     .tab[data-tab="個人"].active    { background: linear-gradient(135deg, #a78bfa, #ec4899); border-color: transparent; color:#fff; }
 
     /* ── カウンター ── */
@@ -123,7 +123,7 @@
     }
 
     .card[data-category="ヨミテ"]::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
-    .card[data-category="澤田"]::before   { background: linear-gradient(90deg, #10b981, #06b6d4); }
+    .card[data-category="SAWADA"]::before   { background: linear-gradient(90deg, #10b981, #06b6d4); }
     .card[data-category="個人"]::before   { background: linear-gradient(90deg, #a78bfa, #ec4899); }
 
     .card:hover {
@@ -166,7 +166,7 @@
     }
 
     .cat-badge.ヨミテ { background: rgba(245,158,11,0.15); color: #f59e0b; }
-    .cat-badge.澤田   { background: rgba(16,185,129,0.15);  color: #10b981; }
+    .cat-badge.SAWADA { background: rgba(16,185,129,0.15);  color: #10b981; }
     .cat-badge.個人   { background: rgba(167,139,250,0.15); color: #a78bfa; }
 
     .card-title {
@@ -224,7 +224,7 @@
 <div class="tabs">
   <button class="tab active" data-tab="全て">全て <span class="count"></span></button>
   <button class="tab" data-tab="ヨミテ">ヨミテ <span class="count"></span></button>
-  <button class="tab" data-tab="澤田">澤田 <span class="count"></span></button>
+  <button class="tab" data-tab="SAWADA">SAWADA <span class="count"></span></button>
   <button class="tab" data-tab="個人">個人 <span class="count"></span></button>
 </div>
 
@@ -308,9 +308,10 @@
   const emptyMsg = document.getElementById('empty-msg');
 
   // カウント表示
-  const counts = { 全て: cards.length, ヨミテ: 0, 澤田: 0, 個人: 0 };
+  const counts = { 全て: cards.length, ヨミテ: 0, SAWADA: 0, 個人: 0 };
   cards.forEach(c => { const cat = c.dataset.category; if (counts[cat] !== undefined) counts[cat]++; });
   tabs.forEach(t => { t.querySelector('.count').textContent = `(${counts[t.dataset.tab] ?? 0})`; });
+
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
